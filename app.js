@@ -2,7 +2,7 @@
   'use strict';
 
   const SAVE_KEY = 'rakugakiQuestSaveV1';
-  const MAX_STAGE = 200;
+  const MAX_STAGE = 300;
   const BASE_MAX = 100;
   const UAT_REWARD_MULTIPLIER = 1000;
 
@@ -33,7 +33,17 @@
     golem: { ink:'#3f4144', fill:'#a9a5a0', trait:'最高クラスの装甲', hp:1.8, damage:1.1, armor:.3 },
     phoenix: { ink:'#642d20', fill:'#ff9d43', trait:'HP半分で超加速', hp:1.2, damage:1.25, berserk:1.55, speed:1.2 },
     titan: { ink:'#3d4233', fill:'#929a69', trait:'巨大・超耐久', hp:2, damage:1.35 },
-    void: { ink:'#29203d', fill:'#6e5a96', trait:'防御を無視する闇', hp:1.55, damage:1.45, pierce:.35 }
+    void: { ink:'#29203d', fill:'#6e5a96', trait:'防御を無視する闇', hp:1.55, damage:1.45, pierce:.35 },
+    snail: { ink:'#4c3a2a', fill:'#efb366', trait:'殻が硬い・自己修復', hp:1.45, damage:.9, armor:.16, regen:.02 },
+    owl: { ink:'#40352e', fill:'#d7b98b', trait:'鋭い目・会心攻撃', hp:1, damage:1.2, crit:.18 },
+    worm: { ink:'#4c3550', fill:'#d58fc3', trait:'すばやい連続攻撃', hp:.9, damage:.82, speed:1.65 },
+    fish: { ink:'#244b5b', fill:'#79c7d9', trait:'水流で防御を貫く', hp:1.05, damage:1.15, pierce:.18 },
+    shark: { ink:'#2f4351', fill:'#7fa5b6', trait:'高火力・HP半分で狂暴化', hp:1.35, damage:1.4, berserk:1.5 },
+    bee: { ink:'#4f3c19', fill:'#f1c84b', trait:'高速・ときどき痛恨', hp:.82, damage:1.08, speed:1.55, crit:.12 },
+    puppet: { ink:'#4e342e', fill:'#efd7bc', trait:'軽やか・攻撃をかわす', hp:.92, damage:1.05, evade:.15 },
+    clock: { ink:'#35434d', fill:'#b8d3dd', trait:'一定間隔で高速化', hp:1.25, damage:1.12, speed:1.25, armor:.08 },
+    rabbit: { ink:'#4b4653', fill:'#e8dff1', trait:'とても素早い', hp:.88, damage:1, speed:1.75, evade:.08 },
+    witch: { ink:'#3d284d', fill:'#a784c7', trait:'魔法攻撃・装甲貫通', hp:1.08, damage:1.32, pierce:.25 }
   };
 
   const ENEMY_VARIANTS = [
@@ -64,7 +74,17 @@
     { id:17, start:161, end:170, name:'蛍光ペンの夜', short:'蛍光の夜', theme:'theme-2', enemies:[['マーカーゴースト','ghost'],['光るデーモン','demon'],['ネオンUFO','ufo']], boss:['蛍光不死鳥','phoenix'] },
     { id:18, start:171, end:180, name:'破線の迷宮', short:'破線迷宮', theme:'theme-3', enemies:[['点線スパイダー','spider'],['迷路ミミック','mimic'],['破線ニンジャ','ninja']], boss:['方眼ミノタウロス','ogre'] },
     { id:19, start:181, end:190, name:'百色の空', short:'百色の空', theme:'theme-4', enemies:[['虹ペン天使','angel'],['クレヨンタイタン','titan'],['七彩ドラゴン','dragon']], boss:['百色フェニックス','phoenix'] },
-    { id:20, start:191, end:200, name:'無限のスケッチ', short:'無限スケッチ', theme:'theme-5', enemies:[['未完の巨人','golem'],['永遠の余白','void'],['始まりの棒人間','stickman']], boss:['創造主・ラクガキ','void'] }
+    { id:20, start:191, end:200, name:'無限のスケッチ', short:'無限スケッチ', theme:'theme-5', enemies:[['未完の巨人','golem'],['永遠の余白','void'],['始まりの棒人間','stickman']], boss:['創造主・ラクガキ','void'] },
+    { id:21, start:201, end:210, name:'のりの湿地', short:'のり湿地', theme:'theme-1', enemies:[['のりツボカタツムリ','snail'],['テープヒル','worm'],['ふせんガエル','slime']], boss:['スティックのり大ナメクジ','snail'] },
+    { id:22, start:211, end:220, name:'バインダー図書館', short:'図書館', theme:'theme-2', enemies:[['リングフクロウ','owl'],['しおりウサギ','rabbit'],['ページワーム','worm']], boss:['百科事典ミミック','mimic'] },
+    { id:23, start:221, end:230, name:'インク海溝', short:'インク海溝', theme:'theme-3', enemies:[['万年筆フィッシュ','fish'],['修正テープエイ','fish'],['ハサミザメ','shark']], boss:['深海インクザメ','shark'] },
+    { id:24, start:231, end:240, name:'画びょう荒野', short:'画びょう荒野', theme:'theme-4', enemies:[['画びょうバチ','bee'],['クリップサソリ','spider'],['針山ゴーレム','golem']], boss:['針千本キング','bee'] },
+    { id:25, start:241, end:250, name:'コピー紙劇場', short:'紙劇場', theme:'theme-5', enemies:[['紙人形ダンサー','puppet'],['セロテープミイラ','ghost'],['影絵ナイト','knight']], boss:['黒幕マリオネット','puppet'] },
+    { id:26, start:251, end:260, name:'時計仕掛けの教室', short:'時計教室', theme:'theme-1', enemies:[['タイマーくん','clock'],['分度器ギア','robot'],['黒板チョークゴースト','ghost']], boss:['終業ベルクロック','clock'] },
+    { id:27, start:261, end:270, name:'消しゴム遊園地', short:'消し遊園地', theme:'theme-2', enemies:[['ケシゴムウサギ','rabbit'],['鉛筆コースター竜','dragon'],['ノート観覧車UFO','ufo']], boss:['ねり消しピエロ','puppet'] },
+    { id:28, start:271, end:280, name:'マーカー魔法陣', short:'魔法陣', theme:'theme-3', enemies:[['マーカーウィッチ','witch'],['蛍光コウモリ','bat'],['インクポットスライム','slime']], boss:['五色ペンの大魔女','witch'] },
+    { id:29, start:281, end:290, name:'破棄文書工場', short:'破棄工場', theme:'theme-4', enemies:[['シュレッダーワーム','worm'],['パンチ穴ロボ','robot'],['ホチキスキメラ','hydra']], boss:['廃棄王シュレッダー','worm'] },
+    { id:30, start:291, end:300, name:'真っ白な新世界', short:'新世界', theme:'theme-5', enemies:[['一番星フクロウ','owl'],['はじまりウサギ','rabbit'],['未知の紙人形','puppet']], boss:['ノートの向こう側','void'] }
   ].map(ch => ({...ch, reward:{ink:50*ch.id+ch.id*ch.id*12, parts:4+ch.id*3, xp:20+ch.id*18}}));
 
   const WEAPONS = [
@@ -126,7 +146,7 @@
   ];
 
   const TUTORIAL = [
-    {icon:'📓',kicker:'はじめに',title:'消えかけた世界を描き直そう',copy:'描いた主人公と一緒に全200ステージへ挑戦します。\nクリア後は通常敵だけの無限ノートにも挑めます。'},
+    {icon:'📓',kicker:'はじめに',title:'消えかけた世界を描き直そう',copy:'描いた主人公と一緒に全300ステージへ挑戦します。\nクリア後は通常敵だけの無限ノートにも挑めます。'},
     {icon:'✎',kicker:'STEP 1',title:'主人公を自由に描く',copy:'形や大きさで性能は変わりません。\n好きな主人公を指やマウスで描いてください。'},
     {icon:'⚔',kicker:'STEP 2',title:'戦闘は自動、準備が勝負',copy:'敵ごとに耐久・攻撃・速度・特性が違います。\n戦力と推奨戦力を見て、武器や永久能力を育てましょう。'},
     {icon:'💡',kicker:'STEP 3',title:'冒険中のひらめき',copy:'戦闘後は3枚から一時強化を1つ選択。\n完全自動モードなら相性のよい報酬を自動で選びます。'},
@@ -281,6 +301,10 @@
     if(id==='ghost'){shape([[90,220],[94,107],[111,62],[160,43],[208,62],[227,109],[231,220],[201,194],[176,222],[151,194],[123,222]],'#e9f0ff');eyes(160,113,42);ellipse(160,155,13,19,'#fff')}
     if(id==='dragon'){shape([[70,177],[90,94],[145,76],[199,105],[225,160],[196,198],[106,204]],'#7ee0ad');ellipse(205,85,45,39,'#7ee0ad');shape([[178,52],[181,15],[202,54]],'#f4bd59');shape([[219,54],[256,29],[247,73]],'#f4bd59');eyes(216,81,24);shape([[113,101],[72,37],[158,85]],'#f4bd59');line([[83,147],[36,118],[50,177]]);line([[119,199],[105,226]]);line([[188,196],[205,225]])}
     if(id==='slime'){shape([[69,202],[79,133],[109,83],[158,69],[210,86],[240,139],[251,203],[221,219],[101,219]],'#b690e8');ellipse(133,137,26,34,'#fff');ellipse(194,137,26,34,'#fff');ctx.fillStyle='#25211f';ctx.beginPath();ctx.arc(137,144,8,0,7);ctx.arc(190,144,8,0,7);ctx.fill();line([[137,185],[160,195],[187,181]])}
+    if(id==='rabbit'){ellipse(160,145,64,61,'#e8dff1');ellipse(160,87,51,47,'#e8dff1');shape([[124,55],[119,10],[147,52]],'#e8dff1');shape([[171,49],[201,11],[195,66]],'#e8dff1');eyes(160,84,30);line([[146,107],[160,116],[177,105]]);line([[112,167],[71,191]]);line([[208,168],[250,191]]);line([[135,202],[122,228]]);line([[188,202],[201,228]])}
+    if(id==='owl'){ellipse(160,132,75,76,'#d7b98b');shape([[91,120],[48,84],[74,166],[107,178]],'#e8cfa5');shape([[229,120],[272,84],[246,166],[213,178]],'#e8cfa5');ellipse(133,107,26,30,'#fff');ellipse(187,107,26,30,'#fff');eyes(160,108,54);shape([[148,132],[160,146],[173,132]],'#f1c84b');shape([[111,70],[129,37],[144,77]],'#d7b98b');shape([[176,77],[194,37],[211,71]],'#d7b98b')}
+    if(id==='clock'){ellipse(160,125,70,70,'#b8d3dd');ellipse(160,125,52,52,'#fffdf5');eyes(160,102,36);line([[160,124],[160,86]]);line([[160,124],[191,141]]);shape([[95,69],[112,31],[135,65]],'#b8d3dd');shape([[185,65],[208,31],[225,69]],'#b8d3dd');line([[123,190],[111,225]]);line([[197,190],[209,225]])}
+    if(id==='witch'){ellipse(160,83,38,35,'#efd7bc');shape([[120,76],[160,17],[202,76]],'#745092');shape([[103,76],[217,76],[198,93],[119,92]],'#745092');eyes(160,83,28);shape([[121,113],[199,113],[216,202],[101,202]],'#a784c7');line([[117,137],[70,178]]);line([[202,137],[245,168]]);ctx.strokeStyle='#9b633e';ctx.lineWidth=12;line([[69,178],[251,219]])}
     ctx.restore();
   }
   function renderSampleHeroes(){$$('#sample-heroes button').forEach(button=>drawSampleHero(button.querySelector('canvas').getContext('2d'),button.dataset.sample,96,76))}
@@ -300,7 +324,7 @@
     function pushHistory(){draw.history.push(canvas.toDataURL());if(draw.history.length>20)draw.history.shift()}
     draw.pushHistory=pushHistory;
   }
-  const SAMPLE_NAMES={pencil:'えんぴつ勇者',cat:'まるネコ',robot:'ハコロボ',ghost:'ぷかオバケ',dragon:'ちびドラゴン',slime:'目玉スライム'};
+  const SAMPLE_NAMES={pencil:'えんぴつ勇者',cat:'まるネコ',robot:'ハコロボ',ghost:'ぷかオバケ',dragon:'ちびドラゴン',slime:'目玉スライム',rabbit:'ケシゴムうさぎ',owl:'リングふくろう',clock:'タイマーくん',witch:'マーカー魔女'};
   function selectSample(id){const canvas=$('#draw-canvas');drawSampleHero(canvas.getContext('2d'),id,canvas.width,canvas.height);draw.pushHistory?.();$('#name-input').value=SAMPLE_NAMES[id]||'サンプル勇者';$$('#sample-heroes button').forEach(button=>button.classList.toggle('selected',button.dataset.sample===id));tone(470,.08,'triangle')}
 
   function seedFrom(text){let seed=0;for(const char of text)seed=(seed*31+char.charCodeAt(0))>>>0;return()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296)}
@@ -336,6 +360,15 @@
       case 'golem': shape([[67,67],[103,46],[140,59],[160,103],[149,162],[113,178],[69,161],[51,113]],true);shape([[35,89],[66,83],[65,143],[34,151]],true,'#bbb5ae');shape([[157,83],[188,91],[187,151],[154,143]],true,'#bbb5ae');eyes(109,96,24,true);line([[88,124],[133,124]],5);break;
       case 'phoenix': shape([[110,145],[74,119],[28,123],[59,92],[34,65],[90,89],[110,50],[130,89],[186,65],[161,92],[192,123],[146,119]],true);ellipse(110,111,27,45);eyes(110,90,14,true);shape([[95,149],[110,193],[126,149]],true,'#ff5d3d');break;
       case 'void': ellipse(110,80,51,45);eyes(110,75,27,false);for(let i=0;i<7;i++){const x=67+i*14;line([[x,111],[x+(i%2?18:-18),145],[x+(i%2?-8:8),181]],7)}ctx.fillStyle='#fff';ellipse(110,101,11,7,'#fff');break;
+      case 'snail': shape([[38,157],[49,125],[82,117],[108,132],[143,139],[176,129],[192,146],[178,166],[65,170]],true);ellipse(112,107,49,47,'#e8a95c');ctx.beginPath();ctx.arc(112,107,30,0,Math.PI*1.72);ctx.stroke();line([[172,133],[176,83]],4);line([[188,136],[199,91]],4);eyes(187,83,22);break;
+      case 'owl': ellipse(110,111,53,59);shape([[67,103],[24,73],[46,145],[79,154]],true,'#e8cfa5');shape([[153,103],[196,73],[174,145],[141,154]],true,'#e8cfa5');ellipse(90,92,20,23,'#fff');ellipse(130,92,20,23,'#fff');eyes(110,93,40);shape([[100,114],[110,126],[121,114]],true,'#f1c84b');shape([[73,69],[89,39],[100,74]]);shape([[120,74],[134,39],[151,68]]);feet(91,129,178);break;
+      case 'worm': for(let i=0;i<6;i++)ellipse(53+i*25,126-(i%2)*12,22,24,i%2?'#eab2d7':fill);eyes(43,116,13);for(let i=0;i<5;i++)line([[68+i*23,142],[63+i*23,166]],3);line([[35,101],[24,78]],3);line([[47,101],[58,76]],3);break;
+      case 'fish':case 'shark': ellipse(108,112,62,43);shape([[48,111],[20,75],[21,148]],true);eyes(133,103,19,true);line([[150,126],[171,119]],3);shape([[96,75],[111,42],[128,80]],true);if(enemy.type==='shark'){shape([[112,78],[130,34],[145,87]],true);for(let i=0;i<5;i++)shape([[125+i*10,128],[130+i*10,141],[136+i*10,127]],true,'#fff')}break;
+      case 'bee': ellipse(110,115,50,36);for(let x=83;x<140;x+=18)line([[x,83],[x+7,146]],5);shape([[80,92],[53,55],[101,78]],true,'#e9f0ff');shape([[140,92],[167,55],[119,78]],true,'#e9f0ff');eyes(139,105,15,true);shape([[60,113],[35,104],[59,125]],true,'#4f3c19');line([[146,136],[165,158]],3);line([[116,147],[121,171]],3);break;
+      case 'puppet': ellipse(110,54,25,24,'#efd7bc');eyes(110,51,16);shape([[88,80],[132,80],[147,145],[73,145]],true);line([[84,92],[48,122],[65,145]],4);line([[136,92],[171,121],[155,145]],4);line([[91,145],[77,181]],4);line([[128,145],[143,181]],4);ellipse(83,86,4,4,'#ef476f');ellipse(137,86,4,4,'#1677ff');line([[110,29],[110,11]],2);line([[48,122],[39,48]],2);line([[171,121],[182,47]],2);break;
+      case 'clock': ellipse(110,105,56,56);ellipse(110,105,42,42,'#fffdf5');eyes(110,91,28);line([[110,105],[110,74]],4);line([[110,105],[137,119]],4);shape([[57,57],[74,24],[92,60]],true);shape([[128,60],[147,24],[164,58]],true);feet(88,132,176);break;
+      case 'rabbit': ellipse(110,123,45,48);ellipse(110,77,36,34);shape([[83,57],[77,18],[102,52]],true);shape([[117,51],[144,18],[139,64]],true);eyes(110,74,23);line([[99,94],[110,102],[123,92]],3);line([[77,137],[45,159]],4);line([[143,137],[175,159]],4);feet(91,129,181);break;
+      case 'witch': humanoid('witch');shape([[73,58],[109,12],[146,58]],true,'#745092');shape([[61,58],[158,58],[144,75],[75,74]],true,'#745092');line([[151,93],[193,169]],8);shape([[181,164],[194,192],[207,161]],true,'#29211d');break;
       default: ellipse(110,110,55,55);eyes(110,100,28);line([[90,140],[110,148],[134,138]],4);
     }
     ctx.strokeStyle=ink;ctx.lineWidth=5;ctx.globalAlpha=1;
@@ -379,6 +412,29 @@
     if(enemy.name.includes('余白')){ctx.setLineDash([9,7]);ctx.strokeRect(32,31,156,158);ctx.setLineDash([])}
     if(enemy.name.includes('終末')){ctx.globalAlpha=.22;ctx.fillStyle='#20202c';ctx.fillRect(30,34,160,145);ctx.globalAlpha=1;line([[35,39],[185,176]],8)}
     if(enemy.name.includes('インク神')){ctx.font='900 54px sans-serif';ctx.fillStyle='#fff';ctx.fillText('0',91,104);ctx.strokeStyle='#fff';ctx.strokeText('0',91,104)}
+    if(enemy.name.includes('のり')){ctx.fillStyle='#f3eee4';ctx.fillRect(82,119,57,45);ctx.strokeRect(82,119,57,45);ctx.fillStyle='#ef476f';ctx.fillRect(82,143,57,21);ctx.strokeRect(82,143,57,21)}
+    if(enemy.name.includes('テープ')){ctx.beginPath();ctx.ellipse(110,116,67,31,0,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.ellipse(110,116,49,17,0,0,Math.PI*2);ctx.stroke()}
+    if(enemy.name.includes('リング')){for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(77+i*22,46,8,0,Math.PI*2);ctx.stroke()}}
+    if(enemy.name.includes('しおり')){shape([[164,62],[184,62],[184,142],[174,132],[164,142]],true,'#ef476f')}
+    if(enemy.name.includes('ページ')){for(let y=61;y<160;y+=15)line([[59,y],[160,y]],2)}
+    if(enemy.name.includes('万年筆')){pencil(174,120,.5,'#263b62');shape([[166,71],[177,48],[187,76]],true,'#d8d8d8')}
+    if(enemy.name.includes('ハサミ')){ctx.beginPath();ctx.arc(167,137,13,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.arc(192,137,13,0,Math.PI*2);ctx.stroke();line([[178,129],[149,69]],5);line([[182,128],[208,68]],5)}
+    if(enemy.name.includes('画びょう')){shape([[91,51],[132,51],[139,71],[118,77],[118,109],[104,109],[104,77],[84,70]],true,'#ef476f')}
+    if(enemy.name.includes('針')){for(let x=52;x<174;x+=20)line([[x,151],[x+8,177]],3)}
+    if(enemy.name.includes('紙人形')||enemy.name.includes('マリオネット')){line([[67,41],[67,121]],2);line([[153,41],[153,121]],2);line([[110,18],[110,54]],2)}
+    if(enemy.name.includes('影絵')){ctx.globalAlpha=.18;ctx.fillStyle='#151515';ctx.fillRect(43,35,134,145);ctx.globalAlpha=1}
+    if(enemy.name.includes('タイマー')){ctx.font='900 20px monospace';ctx.fillStyle=ink;ctx.fillText('00:10',79,119)}
+    if(enemy.name.includes('分度器')){ctx.beginPath();ctx.arc(110,128,70,Math.PI,Math.PI*2);ctx.stroke();line([[40,128],[180,128]],3)}
+    if(enemy.name.includes('チョーク')){for(let i=0;i<3;i++){ctx.fillStyle=['#fff','#ef91a9','#8fc7ef'][i];ctx.fillRect(53+i*25,157,20,8);ctx.strokeRect(53+i*25,157,20,8)}}
+    if(enemy.name.includes('ベル')){shape([[79,131],[89,74],[110,58],[133,74],[144,131]],true,'#f1c84b');ellipse(111,137,39,8,'#e6a832')}
+    if(enemy.name.includes('コースター')){ctx.setLineDash([7,5]);line([[28,173],[58,120],[90,160],[122,91],[169,151],[199,105]],4);ctx.setLineDash([])}
+    if(enemy.name.includes('観覧車')){ctx.beginPath();ctx.arc(110,111,68,0,Math.PI*2);ctx.stroke();for(let i=0;i<8;i++){const a=i*Math.PI/4;line([[110,111],[110+Math.cos(a)*68,111+Math.sin(a)*68]],2)}}
+    if(enemy.name.includes('マーカー')){pencil(177,119,.35,'#9aef5f');ctx.globalAlpha=.22;ctx.fillStyle='#9aef5f';ctx.fillRect(48,94,116,35);ctx.globalAlpha=1}
+    if(enemy.name.includes('インクポット')){shape([[72,113],[147,113],[157,176],[62,176]],true,'#4c355f');shape([[81,92],[138,92],[147,113],[72,113]],true,'#d8d8d8')}
+    if(enemy.name.includes('シュレッダー')){shape([[52,91],[168,91],[176,151],[44,151]],true,'#9da7ad');for(let x=58;x<166;x+=13)line([[x,151],[x+(x%2?6:-6),184]],3)}
+    if(enemy.name.includes('パンチ穴')){for(let i=0;i<4;i++)ellipse(75+i*24,123,7,7,'#fff')}
+    if(enemy.name.includes('一番星')){shape([[110,24],[118,45],[141,46],[123,60],[130,82],[110,68],[91,82],[97,60],[79,46],[102,45]],true,'#ffd447')}
+    if(enemy.name.includes('はじまり')){ctx.font='900 31px sans-serif';ctx.fillStyle=ink;ctx.fillText('1',101,125)}
     if(enemy.variant?.id==='red')line([[35,42],[49,31],[43,52]],5);if(enemy.variant?.id==='giant'){ctx.strokeStyle='#f0a23a';ctx.strokeRect(10,10,200,200)}if(enemy.variant?.id==='speedy'){line([[18,82],[48,82]],4);line([[12,105],[43,105]],4);line([[22,128],[50,128]],4)}if(enemy.variant?.id==='blot'){for(let i=0;i<8;i++){ctx.fillStyle='#7b4bc4';ctx.beginPath();ctx.arc(20+rnd()*180,20+rnd()*180,2+rnd()*6,0,Math.PI*2);ctx.fill()}}
     if(locked){ctx.globalCompositeOperation='source-atop';ctx.fillStyle='rgba(25,25,25,.42)';ctx.fillRect(0,0,220,220)}ctx.restore();
   }
@@ -423,7 +479,7 @@
     $('#enemy-fighter').classList.toggle('boss',enemy.boss);$('#battle-action').disabled=true;$('#battle-action').textContent='戦闘中…';$('#battle-hero').src=heroSrc();$('#speed-button').textContent=`×${run.speed}`;$('#auto-badge').classList.toggle('hidden',!data.autoMode);updateBattleUI();
     if(enemy.boss&&!data.bossSeen[chapter.id]){showDialog(bossIntro(chapter),()=>{data.bossSeen[chapter.id]=true;save();startBattle()})}else startBattle();
   }
-  function bossIntro(chapter){return [[chapter.boss[0],`ステージ${chapter.end}まで来たか。ここから先は通さない！`],[data.heroName,'なら、このページごと描き直す！'],[chapter.boss[0],chapter.id===20?'最後の白紙で消えてしまえ！':'その武器ごと消してやる！']]}
+  function bossIntro(chapter){return [[chapter.boss[0],`ステージ${chapter.end}まで来たか。ここから先は通さない！`],[data.heroName,'なら、このページごと描き直す！'],[chapter.boss[0],chapter.id===30?'最後の白紙で消えてしまえ！':'その武器ごと消してやる！']]}
   function startBattle(){
     run.active=true;
     const loop=()=>{if(!run?.active)return;playerAttack();if(run?.active)battleTimer=setTimeout(enemyAttack,Math.max(560,980/(run.enemy.speed||1))/run.speed)};
@@ -459,7 +515,7 @@
     if(enemy.boss){setTimeout(()=>showDialog([[chapter.boss[0],bossOutro(chapter.id)],[data.heroName,'このページにも、色が戻ってきた！']],()=>finishChapter(chapter,firstClear)),1000);return}
     setTimeout(showCardChoices,1000);
   }
-  function bossOutro(id){return id===20?'描き終わりはない。次の線は、無限に続く……。':id%3===1?'ま、まぶしい……！色って、ちょっと良いかも……':id%3===2?'その線、はみ出してるのに……強い。':'こんなににぎやかなページになるとは……。'}
+  function bossOutro(id){return id===30?'描き終わりはない。次の線は、無限に続く……。':id%3===1?'ま、まぶしい……！色って、ちょっと良いかも……':id%3===2?'その線、はみ出してるのに……強い。':'こんなににぎやかなページになるとは……。'}
   function showCardChoices(){
     const choices=[...CARDS].sort(()=>Math.random()-.5).slice(0,3),box=$('#card-options');box.innerHTML='';
     const choose=card=>{card.effect(run);run.ideas++;run.cards.push(card.id);if(!data.discovered.includes(card.id))data.discovered.push(card.id);save();closeModal('#card-modal');if(!run.endless)run.stage++;run.hp=Math.min(run.maxHp,run.hp+Math.round(run.maxHp*.15));prepareBattle()};
@@ -473,8 +529,8 @@
     const multiplier=firstClear?1:.3,reward={ink:Math.round(chapter.reward.ink*multiplier),parts:Math.max(1,Math.round(chapter.reward.parts*multiplier)),xp:Math.round(chapter.reward.xp*multiplier)};
     data.ink+=reward.ink;data.parts+=reward.parts;data.xp+=reward.xp;data.tickets=(data.tickets||0)+(firstClear?2:0);data.chapterClears[chapter.id]=(data.chapterClears[chapter.id]||0)+1;data.selectedStage=chapter.id<CHAPTERS.length?chapter.end+1:MAX_STAGE;unlockEarnedWeapons();levelCheck();save();run.active=false;
     const unlockedWeapon=WEAPONS.find(w=>w.unlock===chapter.end);
-    $('#chapter-clear-kicker').textContent=chapter.id===CHAPTERS.length?'ALL 200 STAGES CLEAR!':'CHAPTER CLEAR!';$('#chapter-clear-icon').textContent=chapter.id===CHAPTERS.length?'★':'✓';
-    $('#chapter-clear-title').textContent=chapter.id===CHAPTERS.length?'200ステージ完全制覇！':`CHAPTER ${chapter.id} 突破！`;
+    $('#chapter-clear-kicker').textContent=chapter.id===CHAPTERS.length?'ALL 300 STAGES CLEAR!':'CHAPTER CLEAR!';$('#chapter-clear-icon').textContent=chapter.id===CHAPTERS.length?'★':'✓';
+    $('#chapter-clear-title').textContent=chapter.id===CHAPTERS.length?'300ステージ完全制覇！':`CHAPTER ${chapter.id} 突破！`;
     $('#chapter-clear-copy').textContent=`「${chapter.name}」をクリア。${unlockedWeapon?`新武器「${unlockedWeapon.name}」を入手しました！`:'クリア済みステージは何度でも再挑戦できます。'}`;
     $('#chapter-rewards').innerHTML=`<span>● +${reward.ink}</span><span>✂ +${reward.parts}</span><span>☆ +${reward.xp}</span>${unlockedWeapon?`<span>${unlockedWeapon.icon} NEW</span>`:''}`;
     closeModal('#dialog-modal');openModal('#chapter-modal');
@@ -583,7 +639,7 @@
     return {name:pick.item.name,icon:pick.item.icon,rarity,kind:pick.kind,new:wasNew};
   }
   function enemyStory(entry){
-    const origins={stickman:'ノートのすみに最初に描かれた、素朴で負けず嫌いなラクガキ。',slime:'消しカスとインクが混ざって生まれた、ぷるぷるの掃除屋。',goblin:'使いかけの文房具を集める、いたずら好きの小鬼。',dragon:'赤ペンの勢いから生まれた、誇り高い空のラクガキ。',ghost:'書き損じを消した跡に残る、少しさびしがりな影。',robot:'定規で引いた線と計算式から組み上がった機械生命。',crab:'ホチキスやクリップを殻にした、机上の働き者。',knight:'定規を盾に、コンパスを槍にして余白を守る騎士。',void:'描かれなかった余白そのもの。新しい線を静かに待っている。'};
+    const origins={stickman:'ノートのすみに最初に描かれた、素朴で負けず嫌いなラクガキ。',slime:'消しカスとインクが混ざって生まれた、ぷるぷるの掃除屋。',goblin:'使いかけの文房具を集める、いたずら好きの小鬼。',dragon:'赤ペンの勢いから生まれた、誇り高い空のラクガキ。',ghost:'書き損じを消した跡に残る、少しさびしがりな影。',robot:'定規で引いた線と計算式から組み上がった機械生命。',crab:'ホチキスやクリップを殻にした、机上の働き者。',knight:'定規を盾に、コンパスを槍にして余白を守る騎士。',snail:'のりと丸まった紙から生まれた、ゆっくり几帳面な運び屋。',owl:'本の知識を目いっぱい吸い込んだ、夜ふかし好きの案内役。',worm:'細長い紙片がつながって動き出した、せっかちなラクガキ。',fish:'こぼれた青インクを泳ぐ、好奇心いっぱいの水中ラクガキ。',shark:'切れ味のよい文房具を集める、迫力満点の海の番人。',bee:'画びょうの針と黄色いマーカーから生まれた働き者。',puppet:'切り抜いた紙へ糸を結んで動き出した、舞台好きの紙人形。',clock:'時間割と時計の数字から組み上がった、時間に厳しい機械。',rabbit:'消しゴムの角が耳になって跳び出した、すばしっこい人気者。',witch:'色とりどりのマーカーで魔法陣を描く、いたずら好きの魔女。',void:'描かれなかった余白そのもの。新しい線を静かに待っている。'};
     const stationery=entry.name.includes('ホチキス')?'背中のホチキスで紙を束ね、針の脚でカチカチ歩く。':entry.name.includes('定規')?'体の直線は定規でできており、曲がった線を見ると直したくなる。':entry.name.includes('ふせん')?'付箋の羽を貼ったりはがしたりして飛ぶ。':entry.name.includes('クリップ')?'クリップを曲げた体で、散らかった紙を回収する。':'';
     return `${origins[entry.type]||'紙とインクのすき間から生まれた、個性豊かなラクガキ。'}${stationery}`;
   }
