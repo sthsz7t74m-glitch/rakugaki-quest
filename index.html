@@ -23,7 +23,7 @@
           <span class="resource parts-resource" title="文房具素材">✂ <b id="parts-count">0</b></span>
           <span class="resource ticket-resource" title="ガチャ券" aria-label="ガチャ券の所持数"><i class="ticket-sketch" aria-hidden="true"></i><b id="ticket-count">0</b></span>
           <button id="open-help" class="help-button" aria-label="遊び方を見る">?</button>
-          <span class="version">v0.5.2</span>
+          <span class="version">v0.5.3</span>
         </div>
       </header>
 
@@ -61,10 +61,10 @@
 
         <div class="home-grid">
           <button id="open-base" class="menu-card menu-card-simple accent-yellow" aria-label="拠点を開く"><span class="menu-icon">⌂</span><b>拠点</b></button>
-          <button id="open-collection" class="menu-card accent-blue"><span class="menu-icon">▤</span><b>図鑑</b><small id="card-count-copy">敵 0%・強化 0%</small></button>
-          <button id="open-weapons" class="menu-card accent-red wide-card"><span class="menu-icon">⚔</span><b>装備</b><small id="weapon-summary">えんぴつ剣 Lv.1</small></button>
-          <button id="open-gacha" class="menu-card accent-purple wide-card"><span class="menu-icon">★</span><b>ガチャ</b><small id="gacha-summary">SSR天井まで 50回</small></button>
-          <button id="open-growth" class="menu-card accent-green wide-card"><span class="menu-icon">↗</span><b>育成</b><small id="growth-summary">攻撃・体力・会心を永久強化</small></button>
+          <button id="open-collection" class="menu-card menu-card-simple accent-blue" aria-label="図鑑を開く"><span class="menu-icon">▤</span><b>図鑑</b><small id="card-count-copy" class="menu-status">敵 0%・強化 0%</small></button>
+          <button id="open-weapons" class="menu-card menu-card-simple accent-red" aria-label="装備を開く"><span class="menu-icon">⚔</span><b>装備</b><small id="weapon-summary" class="menu-status">えんぴつ剣 Lv.1</small></button>
+          <button id="open-gacha" class="menu-card menu-card-simple accent-purple" aria-label="ガチャを開く"><span class="menu-icon">★</span><b>ガチャ</b><small id="gacha-summary" class="menu-status">SSR天井まで 50回</small></button>
+          <button id="open-growth" class="menu-card menu-card-simple accent-green" aria-label="育成を開く"><span class="menu-icon">↗</span><b>育成</b><small id="growth-summary" class="menu-status">攻撃・体力・会心を永久強化</small></button>
         </div>
       </section>
 
@@ -130,18 +130,36 @@
       <section id="weapons-view" class="view" aria-labelledby="weapons-title">
         <div class="section-heading"><button class="back-equipment icon-button">←</button><div><small>WEAPON</small><h1 id="weapons-title">武器</h1></div><span id="weapon-count">1/12</span></div>
         <p class="section-lead">攻撃力を中心に強化。武器ごとの会心・貫通・HP補正も現在値で表示します。</p>
+        <div class="list-tools" data-gear-tools="weapons">
+          <label><span>表示</span><select data-gear-filter><option value="all">すべて</option><option value="owned">所持中</option><option value="equipped">装備中</option><option value="locked">未入手</option></select></label>
+          <label><span>種類</span><select data-gear-category><option value="all">すべて</option><option value="近接">近接</option><option value="遠距離">遠距離</option><option value="魔法">魔法</option></select></label>
+          <label><span>並び順</span><select data-gear-sort><option value="default">入手順</option><option value="level">レベル順</option><option value="power">能力順</option><option value="name">名前順</option></select></label>
+          <output data-gear-result>12件</output>
+        </div>
         <div id="weapon-list" class="weapon-list"></div>
       </section>
 
       <section id="armors-view" class="view" aria-labelledby="armors-title">
         <div class="section-heading"><button class="back-equipment icon-button">←</button><div><small>ARMOR</small><h1 id="armors-title">防具</h1></div><span id="armor-count">1/6</span></div>
         <p class="section-lead">最大HPとダメージ軽減を強化。粘り強く戦いたいときの装備です。</p>
+        <div class="list-tools" data-gear-tools="armors">
+          <label><span>表示</span><select data-gear-filter><option value="all">すべて</option><option value="owned">所持中</option><option value="equipped">装備中</option><option value="locked">未入手</option></select></label>
+          <label><span>レア度</span><select data-gear-category><option value="all">すべて</option><option value="R">R</option><option value="SR">SR</option><option value="SSR">SSR</option></select></label>
+          <label><span>並び順</span><select data-gear-sort><option value="default">図鑑順</option><option value="level">レベル順</option><option value="power">能力順</option><option value="rarity">レア度順</option><option value="name">名前順</option></select></label>
+          <output data-gear-result>6件</output>
+        </div>
         <div id="armor-list" class="weapon-list"></div>
       </section>
 
       <section id="accessories-view" class="view" aria-labelledby="accessories-title">
         <div class="section-heading"><button class="back-equipment icon-button">←</button><div><small>ACCESSORY</small><h1 id="accessories-title">アクセサリー</h1></div><span id="accessory-count">1/6</span></div>
         <p class="section-lead">攻撃・HP・会心・貫通を補助。武器と防具に足りない能力を補えます。</p>
+        <div class="list-tools" data-gear-tools="accessories">
+          <label><span>表示</span><select data-gear-filter><option value="all">すべて</option><option value="owned">所持中</option><option value="equipped">装備中</option><option value="locked">未入手</option></select></label>
+          <label><span>レア度</span><select data-gear-category><option value="all">すべて</option><option value="R">R</option><option value="SR">SR</option><option value="SSR">SSR</option></select></label>
+          <label><span>並び順</span><select data-gear-sort><option value="default">図鑑順</option><option value="level">レベル順</option><option value="power">能力順</option><option value="rarity">レア度順</option><option value="name">名前順</option></select></label>
+          <output data-gear-result>6件</output>
+        </div>
         <div id="accessory-list" class="weapon-list"></div>
       </section>
 
@@ -165,6 +183,12 @@
           <button id="card-book-tab" role="tab">ひらめき <small id="card-book-total">0/15</small></button>
         </div>
         <p id="collection-lead" class="section-lead">出会った敵の落書き、特性、出現場所を記録します。未遭遇はシルエット表示。</p>
+        <div id="collection-tools" class="list-tools collection-tools">
+          <label><span>表示</span><select id="collection-filter"><option value="all">すべて</option><option value="found">発見済み</option><option value="missing">未発見</option></select></label>
+          <label><span id="collection-category-label">種類</span><select id="collection-category"></select></label>
+          <label><span>並び順</span><select id="collection-sort"></select></label>
+          <output id="collection-result">80件</output>
+        </div>
         <div id="enemy-collection-grid" class="enemy-collection-grid"></div>
         <div id="collection-grid" class="collection-grid hidden"></div>
       </section>

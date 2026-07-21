@@ -168,3 +168,38 @@ button.unaffordable:after{content:"不足";display:block;font-size:7px;color:#9b
 .base-upgrade-actions{display:grid;grid-template-columns:1fr 145px;gap:9px;align-items:stretch;margin-top:16px}.base-upgrade-actions .upgrade-button{margin-top:0}.max-upgrade-button{border:2.5px solid var(--ink);border-radius:9px 14px 8px 12px;background:#d8e8ff;box-shadow:3px 4px 0 var(--ink);padding:8px;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}.max-upgrade-button b,.max-upgrade-button small{display:block}.max-upgrade-button b{font-size:10px}.max-upgrade-button small{font-size:6px;margin-top:3px;color:var(--muted)}
 #upgrade-base,[data-growth],[data-growth-max],[data-upgrade],[data-upgrade-max]{-webkit-touch-callout:none!important;-webkit-user-select:none!important;user-select:none!important;touch-action:manipulation}
 @media (max-width:370px){.equipment-hub-card{grid-template-columns:56px 1fr 16px;min-height:102px;padding:10px}.equipment-hub-card>span{width:52px;height:52px}.weapon-item{grid-template-columns:43px minmax(0,1fr) 74px;gap:7px}.weapon-icon{width:40px;height:40px}.growth-item{grid-template-columns:42px minmax(0,1fr) 72px;gap:7px}.growth-actions button{min-width:68px}.base-upgrade-actions{grid-template-columns:1fr 120px}}
+
+/* v0.5.3: one-row home menu and a dedicated resource row below the title */
+.topbar{position:relative;display:block;height:88px;margin-bottom:10px}
+.topbar .logo{position:absolute;left:0;top:5px}
+.topbar .resources{position:absolute;left:0;right:0;top:51px;width:100%;justify-content:flex-start}
+.topbar .help-button{margin-left:auto}
+
+#home-view .home-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:5px 0 7px}
+#home-view .menu-card-simple{min-width:0;min-height:54px;padding:5px 2px;border-width:1.8px;box-shadow:1px 2px 0;overflow:hidden}
+#home-view .menu-card-simple .menu-icon{position:static;font-size:19px;line-height:1}
+#home-view .menu-card-simple b{margin:4px 0 0;font-size:9px;line-height:1;white-space:nowrap}
+.menu-status{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+@media (max-width:390px){
+  .topbar{height:86px}.topbar .logo{top:4px}.topbar .resources{top:49px}
+  .topbar .resource{padding:4px 6px}.topbar .help-button{width:26px;height:26px}
+  #home-view .home-grid{gap:4px}
+  #home-view .menu-card-simple{min-height:51px}
+}
+@media (max-width:335px){
+  .topbar .resources{gap:2px}.topbar .resource{padding:3px 4px;font-size:9px}
+  #home-view .home-grid{gap:3px}
+  #home-view .menu-card-simple{min-height:48px;padding-left:1px;padding-right:1px}
+  #home-view .menu-card-simple .menu-icon{font-size:17px}
+  #home-view .menu-card-simple b{font-size:8px}
+}
+
+/* Compact sort and filter controls */
+.list-tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:6px;align-items:end;margin:8px 0 11px;padding:7px;background:rgba(255,255,255,.8);border:1.5px dashed var(--ink);border-radius:9px}
+.list-tools label{min-width:0}.list-tools label>span{display:block;margin:0 0 2px 3px;font-size:7px;color:var(--muted)}
+.list-tools select{width:100%;min-width:0;height:31px;border:1.5px solid var(--ink);border-radius:7px;background:#fff;padding:2px 20px 2px 6px;font-size:8px;font-weight:900;outline:none}
+.list-tools select:focus{box-shadow:0 0 0 2px rgba(22,119,255,.2)}
+.list-tools output{align-self:end;min-width:35px;height:31px;display:grid;place-items:center;border-radius:7px;background:var(--ink);color:#fff;font-size:8px;white-space:nowrap}
+.empty-filter{grid-column:1/-1;width:100%;margin:12px 0;padding:24px 10px;text-align:center;border:2px dashed var(--line);border-radius:10px;color:var(--muted);font-size:10px}
+@media (max-width:350px){.list-tools{gap:4px;padding:5px}.list-tools select{padding-left:4px;font-size:7px}.list-tools output{min-width:31px;font-size:7px}}
