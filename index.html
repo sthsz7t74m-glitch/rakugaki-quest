@@ -22,7 +22,7 @@
           <span class="resource"><i class="ink-drop"></i><b id="ink-count">0</b></span>
           <span class="resource parts-resource" title="文房具素材">✂ <b id="parts-count">0</b></span>
           <button id="open-help" class="help-button" aria-label="遊び方を見る">?</button>
-          <span class="version">v0.3.0</span>
+          <span class="version">v0.4.0</span>
         </div>
       </header>
 
@@ -53,7 +53,7 @@
 
         <div class="home-grid">
           <button id="open-base" class="menu-card accent-yellow"><span class="menu-icon">⌂</span><b>拠点</b><small id="base-summary">Lv.1 / MAX 20・放置報酬</small></button>
-          <button id="open-collection" class="menu-card accent-blue"><span class="menu-icon">▤</span><b>図鑑</b><small id="card-count-copy">強化 0 / 9</small></button>
+          <button id="open-collection" class="menu-card accent-blue"><span class="menu-icon">▤</span><b>図鑑</b><small id="card-count-copy">敵 0%・強化 0%</small></button>
           <button id="open-weapons" class="menu-card accent-red wide-card"><span class="menu-icon">⚔</span><b>武器・装備</b><small id="weapon-summary">えんぴつ剣 Lv.1</small></button>
           <button id="open-growth" class="menu-card accent-green wide-card"><span class="menu-icon">↗</span><b>主人公の育成</b><small id="growth-summary">攻撃・体力・会心を永久強化</small></button>
         </div>
@@ -71,7 +71,7 @@
           <div class="battle-splash" id="battle-splash"></div>
           <div class="fighter player-fighter" id="player-fighter"><img id="battle-hero" alt="主人公" /></div>
           <div class="fighter enemy-fighter" id="enemy-fighter">
-            <div id="enemy-art" class="enemy-art"><span id="enemy-glyph" class="enemy-glyph">●</span><i></i><i></i></div>
+            <div id="enemy-art" class="enemy-art"><canvas id="enemy-canvas" width="220" height="220" aria-label="落書きの敵"></canvas></div>
           </div>
           <div class="ground-line"></div>
         </div>
@@ -90,14 +90,14 @@
 
       <section id="base-view" class="view" aria-labelledby="base-title">
         <div class="section-heading"><button class="back-home icon-button">←</button><div><small>HOME BASE</small><h1 id="base-title">らくがき拠点</h1></div><span>Lv.<b id="base-level">1</b> / MAX 20</span></div>
-        <div class="base-illustration"><span>✐</span><b>机のすみっこ基地</b><small>時間がたつと素材がたまるよ</small></div>
+        <div class="base-illustration"><span>✐</span><b>机のすみっこ基地</b><small>下の施設を「配置」すると、ゲームを閉じていても自動収集</small></div>
         <section class="offline-card">
-          <div><small>自動収集モード・最大12時間</small><b id="offline-time">00:00</b><em id="offline-preview">受取見込みを計算中</em></div>
+          <div><small>自動収集モード・最大12時間 <strong class="uat-badge">UAT ×1000</strong></small><b id="offline-time">00:00</b><em id="offline-preview">受取見込みを計算中</em></div>
           <button id="claim-offline" class="small-button">まとめて受取</button>
         </section>
         <div id="facility-list" class="facility-list"></div>
         <button id="upgrade-base" class="primary-button upgrade-button"><span>拠点を強化</span><b id="upgrade-cost">インク 40</b></button>
-        <p class="helper-copy">拠点Lv.5で配置枠が2つ、Lv.10で3つに増えます。</p>
+        <p class="helper-copy">「経験値スケッチ広場」を配置すると、放置中に主人公EXPを獲得。拠点Lv.5で配置枠が2つ、Lv.10で3つに増えます。</p>
       </section>
 
       <section id="stage-view" class="view" aria-labelledby="stage-title">
@@ -116,9 +116,14 @@
       </section>
 
       <section id="collection-view" class="view" aria-labelledby="collection-title">
-        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>COLLECTION</small><h1 id="collection-title">ひらめき図鑑</h1></div><span id="collection-total">0/9</span></div>
-        <p class="section-lead">冒険中に一度でも選んだ強化が記録されます。</p>
-        <div id="collection-grid" class="collection-grid"></div>
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>COLLECTION</small><h1 id="collection-title">ラクガキ図鑑</h1></div><span id="collection-total">0%</span></div>
+        <div class="collection-tabs" role="tablist" aria-label="図鑑の種類">
+          <button id="enemy-book-tab" class="active" role="tab">敵図鑑 <small id="enemy-book-total">0/40</small></button>
+          <button id="card-book-tab" role="tab">ひらめき <small id="card-book-total">0/15</small></button>
+        </div>
+        <p id="collection-lead" class="section-lead">出会った敵の落書き、特性、出現場所を記録します。未遭遇はシルエット表示。</p>
+        <div id="enemy-collection-grid" class="enemy-collection-grid"></div>
+        <div id="collection-grid" class="collection-grid hidden"></div>
       </section>
 
       <section id="growth-view" class="view" aria-labelledby="growth-title">
@@ -141,6 +146,15 @@
         <div class="sheet-heading"><div><small>MY HERO</small><h2>主人公を描こう</h2></div><button id="close-draw" class="icon-button">×</button></div>
         <input id="name-input" class="name-input" maxlength="12" placeholder="主人公のなまえ" aria-label="主人公の名前" />
         <p class="draw-guide">指やマウスで自由に描こう。描いている間は画面が動きません。</p>
+        <div class="sample-heading"><b>サンプルから選ぶ</b><small>選んだあと自由に描き足せます</small></div>
+        <div id="sample-heroes" class="sample-heroes" aria-label="サンプル主人公">
+          <button data-sample="pencil"><canvas width="96" height="76"></canvas><span>えんぴつ勇者</span></button>
+          <button data-sample="cat"><canvas width="96" height="76"></canvas><span>まるネコ</span></button>
+          <button data-sample="robot"><canvas width="96" height="76"></canvas><span>ハコロボ</span></button>
+          <button data-sample="ghost"><canvas width="96" height="76"></canvas><span>ぷかオバケ</span></button>
+          <button data-sample="dragon"><canvas width="96" height="76"></canvas><span>ちびドラゴン</span></button>
+          <button data-sample="slime"><canvas width="96" height="76"></canvas><span>目玉スライム</span></button>
+        </div>
         <div class="canvas-wrap"><canvas id="draw-canvas" width="640" height="420" aria-label="主人公を描くキャンバス"></canvas><span>ここに描いてね</span></div>
         <div class="drawing-tools">
           <div class="colors" role="group" aria-label="ペンの色">
@@ -194,6 +208,19 @@
         <p id="tutorial-copy"></p>
         <div id="tutorial-dots" class="tutorial-dots" aria-label="説明の進行状況"></div>
         <button id="tutorial-next" class="primary-button">つぎへ →</button>
+      </div>
+    </section>
+
+    <section id="confirm-modal" class="modal confirm-modal" aria-hidden="true">
+      <div class="modal-sheet confirm-sheet">
+        <div class="confirm-sketch" aria-hidden="true">!</div>
+        <small>CONFIRM</small>
+        <h2 id="confirm-title">確認</h2>
+        <p id="confirm-copy"></p>
+        <div class="confirm-actions">
+          <button id="confirm-cancel">やめる</button>
+          <button id="confirm-ok">OK</button>
+        </div>
       </div>
     </section>
 
