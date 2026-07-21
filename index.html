@@ -23,7 +23,7 @@
           <span class="resource parts-resource" title="文房具素材">✂ <b id="parts-count">0</b></span>
           <span class="resource ticket-resource" title="ガチャ券" aria-label="ガチャ券の所持数"><i class="ticket-sketch" aria-hidden="true"></i><b id="ticket-count">0</b></span>
           <button id="open-help" class="help-button" aria-label="遊び方を見る">?</button>
-          <span class="version">v0.5.4</span>
+          <span class="version">v0.6.0</span>
         </div>
       </header>
 
@@ -39,7 +39,7 @@
         </section>
 
         <section class="progress-card">
-          <div class="progress-copy"><span>全200ステージ・クリア済み</span><b>STAGE <em id="best-stage">0</em> / 200</b></div>
+          <div class="progress-copy"><span>全300ステージ・クリア済み</span><b>STAGE <em id="best-stage">0</em> / 300</b></div>
           <div class="notebook-line"><i id="chapter-progress"></i></div>
           <div id="chapter-map" class="chapter-map" aria-label="章の進行状況"></div>
           <p>10ステージごとに新しい敵と装備が待っている。</p>
@@ -110,7 +110,7 @@
       </section>
 
       <section id="stage-view" class="view" aria-labelledby="stage-title">
-        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>STAGE SELECT</small><h1 id="stage-title">ステージを選ぶ</h1></div><span><b id="stage-unlocked">1</b>/200</span></div>
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>STAGE SELECT</small><h1 id="stage-title">ステージを選ぶ</h1></div><span><b id="stage-unlocked">1</b>/300</span></div>
         <section class="recommended-card"><div><small>現在の戦力</small><b id="select-power">100</b></div><p>赤い「危険」表示のステージは、先に育成や武器強化がおすすめ。</p></section>
         <div id="chapter-tabs" class="chapter-tabs"></div>
         <div id="stage-grid" class="stage-grid"></div>
@@ -179,7 +179,7 @@
       <section id="collection-view" class="view" aria-labelledby="collection-title">
         <div class="section-heading"><button class="back-home icon-button">←</button><div><small>COLLECTION</small><h1 id="collection-title">ラクガキ図鑑</h1></div><span id="collection-total">0%</span></div>
         <div class="collection-tabs" role="tablist" aria-label="図鑑の種類">
-          <button id="enemy-book-tab" class="active" role="tab">キャラクター図鑑 <small id="enemy-book-total">0/80</small></button>
+          <button id="enemy-book-tab" class="active" role="tab">キャラクター図鑑 <small id="enemy-book-total">0/120</small></button>
           <button id="card-book-tab" role="tab">ひらめき <small id="card-book-total">0/15</small></button>
         </div>
         <p id="collection-lead" class="section-lead">出会った敵の落書き、特性、出現場所を記録します。未遭遇はシルエット表示。</p>
@@ -187,7 +187,7 @@
           <label><span>表示</span><select id="collection-filter"><option value="all">すべて</option><option value="found">発見済み</option><option value="missing">未発見</option></select></label>
           <label><span id="collection-category-label">種類</span><select id="collection-category"></select></label>
           <label><span>並び順</span><select id="collection-sort"></select></label>
-          <output id="collection-result">80件</output>
+          <output id="collection-result">120件</output>
         </div>
         <div id="enemy-collection-grid" class="enemy-collection-grid"></div>
         <div id="collection-grid" class="collection-grid hidden"></div>
@@ -221,6 +221,10 @@
           <button data-sample="ghost"><canvas width="96" height="76"></canvas><span>ぷかオバケ</span></button>
           <button data-sample="dragon"><canvas width="96" height="76"></canvas><span>ちびドラゴン</span></button>
           <button data-sample="slime"><canvas width="96" height="76"></canvas><span>目玉スライム</span></button>
+          <button data-sample="rabbit"><canvas width="96" height="76"></canvas><span>ケシゴムうさぎ</span></button>
+          <button data-sample="owl"><canvas width="96" height="76"></canvas><span>リングふくろう</span></button>
+          <button data-sample="clock"><canvas width="96" height="76"></canvas><span>タイマーくん</span></button>
+          <button data-sample="witch"><canvas width="96" height="76"></canvas><span>マーカー魔女</span></button>
         </div>
         <div class="canvas-wrap"><canvas id="draw-canvas" width="640" height="420" aria-label="主人公を描くキャンバス"></canvas><span>ここに描いてね</span></div>
         <div class="drawing-tools">
