@@ -203,3 +203,24 @@ button.unaffordable:after{content:"不足";display:block;font-size:7px;color:#9b
 .list-tools output{align-self:end;min-width:35px;height:31px;display:grid;place-items:center;border-radius:7px;background:var(--ink);color:#fff;font-size:8px;white-space:nowrap}
 .empty-filter{grid-column:1/-1;width:100%;margin:12px 0;padding:24px 10px;text-align:center;border:2px dashed var(--line);border-radius:10px;color:var(--muted);font-size:10px}
 @media (max-width:350px){.list-tools{gap:4px;padding:5px}.list-tools select{padding-left:4px;font-size:7px}.list-tools output{min-width:31px;font-size:7px}}
+
+/* v0.5.4: menu first, chapter second, and a contained hero-drawing action */
+#home-view .home-grid{order:0}
+#home-view .chapter-label{order:1;margin:2px 0 8px}
+#home-view .pencil-button{
+  position:absolute;
+  top:8px;
+  right:8px;
+  z-index:4;
+  width:auto;
+  max-width:calc(100% - 76px);
+  margin:0;
+  padding:5px 8px;
+  white-space:nowrap;
+  line-height:1.2;
+}
+#home-view .pencil-button span{font-size:14px;margin-right:2px}
+@media (max-width:335px){
+  #home-view .pencil-button{right:6px;max-width:calc(100% - 70px);padding:4px 6px;font-size:7px}
+  #home-view .pencil-button span{font-size:12px}
+}
