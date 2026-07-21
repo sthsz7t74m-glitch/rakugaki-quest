@@ -21,8 +21,9 @@
         <div class="resources" aria-label="所持資源">
           <span class="resource"><i class="ink-drop"></i><b id="ink-count">0</b></span>
           <span class="resource parts-resource" title="文房具素材">✂ <b id="parts-count">0</b></span>
+          <span class="resource ticket-resource" title="ガチャ券">券 <b id="ticket-count">0</b></span>
           <button id="open-help" class="help-button" aria-label="遊び方を見る">?</button>
-          <span class="version">v0.4.0</span>
+          <span class="version">v0.5.0</span>
         </div>
       </header>
 
@@ -38,10 +39,10 @@
         </section>
 
         <section class="progress-card">
-          <div class="progress-copy"><span>全100ステージ・クリア済み</span><b>STAGE <em id="best-stage">0</em> / 100</b></div>
+          <div class="progress-copy"><span>全200ステージ・クリア済み</span><b>STAGE <em id="best-stage">0</em> / 200</b></div>
           <div class="notebook-line"><i id="chapter-progress"></i></div>
           <div id="chapter-map" class="chapter-map" aria-label="章の進行状況"></div>
-          <p>10ステージごとに新しい敵と武器が待っている。</p>
+          <p>10ステージごとに新しい敵と装備が待っている。</p>
         </section>
 
         <button id="open-stages" class="stage-select-button"><span>▦</span><b>ステージを選ぶ</b><small>クリア済みの場所へ再挑戦</small><i>›</i></button>
@@ -51,10 +52,18 @@
           <b>ノートの奥へ進む</b><i>→</i>
         </button>
 
+        <section class="auto-mode-card">
+          <div><b>完全自動モード</b><small>戦闘後のひらめきを自動で選択して、そのまま次へ進みます</small></div>
+          <label class="switch"><input id="auto-mode" type="checkbox" /><span></span></label>
+        </section>
+
+        <button id="start-endless" class="endless-button"><span>∞</span><b>エンドレスノート</b><small>通常敵とどこまでも連戦・最高 <em id="endless-best">0</em>体</small><i>›</i></button>
+
         <div class="home-grid">
           <button id="open-base" class="menu-card accent-yellow"><span class="menu-icon">⌂</span><b>拠点</b><small id="base-summary">Lv.1 / MAX 20・放置報酬</small></button>
           <button id="open-collection" class="menu-card accent-blue"><span class="menu-icon">▤</span><b>図鑑</b><small id="card-count-copy">敵 0%・強化 0%</small></button>
-          <button id="open-weapons" class="menu-card accent-red wide-card"><span class="menu-icon">⚔</span><b>武器・装備</b><small id="weapon-summary">えんぴつ剣 Lv.1</small></button>
+          <button id="open-weapons" class="menu-card accent-red wide-card"><span class="menu-icon">⚔</span><b>装備</b><small id="weapon-summary">えんぴつ剣 Lv.1</small></button>
+          <button id="open-gacha" class="menu-card accent-purple wide-card"><span class="menu-icon">★</span><b>装備ガチャ</b><small id="gacha-summary">SSR天井まで 50回</small></button>
           <button id="open-growth" class="menu-card accent-green wide-card"><span class="menu-icon">↗</span><b>主人公の育成</b><small id="growth-summary">攻撃・体力・会心を永久強化</small></button>
         </div>
       </section>
@@ -63,7 +72,7 @@
         <div class="battle-topline">
           <button id="quit-run" class="icon-button" aria-label="挑戦を中断する">×</button>
           <div><small id="battle-chapter">CHAPTER 1</small><h1 id="battle-title">STAGE <span id="stage-number">1</span></h1></div>
-          <button id="speed-button" class="speed-button" aria-label="戦闘速度">×1</button>
+          <div class="battle-controls"><span id="auto-badge" class="auto-badge hidden">AUTO</span><button id="speed-button" class="speed-button" aria-label="戦闘速度">×1</button></div>
         </div>
 
         <div id="battle-scene" class="battle-scene">
@@ -92,7 +101,7 @@
         <div class="section-heading"><button class="back-home icon-button">←</button><div><small>HOME BASE</small><h1 id="base-title">らくがき拠点</h1></div><span>Lv.<b id="base-level">1</b> / MAX 20</span></div>
         <div class="base-illustration"><span>✐</span><b>机のすみっこ基地</b><small>下の施設を「配置」すると、ゲームを閉じていても自動収集</small></div>
         <section class="offline-card">
-          <div><small>自動収集モード・最大12時間 <strong class="uat-badge">UAT ×1000</strong></small><b id="offline-time">00:00</b><em id="offline-preview">受取見込みを計算中</em></div>
+          <div><small>自動収集モード・最大12時間 <strong class="uat-badge">UAT ×1000</strong></small><b id="offline-time">00:00</b><em id="offline-rate">拠点Lv.で生産量アップ</em><em id="offline-preview">受取見込みを計算中</em></div>
           <button id="claim-offline" class="small-button">まとめて受取</button>
         </section>
         <div id="facility-list" class="facility-list"></div>
@@ -101,7 +110,7 @@
       </section>
 
       <section id="stage-view" class="view" aria-labelledby="stage-title">
-        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>STAGE SELECT</small><h1 id="stage-title">ステージを選ぶ</h1></div><span><b id="stage-unlocked">1</b>/100</span></div>
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>STAGE SELECT</small><h1 id="stage-title">ステージを選ぶ</h1></div><span><b id="stage-unlocked">1</b>/200</span></div>
         <section class="recommended-card"><div><small>現在の戦力</small><b id="select-power">100</b></div><p>赤い「危険」表示のステージは、先に育成や武器強化がおすすめ。</p></section>
         <div id="chapter-tabs" class="chapter-tabs"></div>
         <div id="stage-grid" class="stage-grid"></div>
@@ -109,16 +118,35 @@
       </section>
 
       <section id="weapons-view" class="view" aria-labelledby="weapons-title">
-        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>EQUIPMENT</small><h1 id="weapons-title">武器・装備</h1></div><span id="weapon-count">1/6</span></div>
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>EQUIPMENT</small><h1 id="weapons-title">武器・防具・アクセ</h1></div><span id="weapon-count">1/12</span></div>
         <section class="equipped-card"><span id="equipped-icon">✎</span><div><small>装備中</small><b id="equipped-name">えんぴつ剣</b><p id="equipped-effect">攻撃力 +10%</p></div></section>
-        <p class="section-lead">ボスを倒すと新武器を獲得。素材で強化すると攻撃方法と戦力が伸びます。</p>
+        <section class="gear-slots" id="gear-slots"></section>
+        <p class="section-lead">すべての装備は上限なし。ボタン長押しで連続強化できます。</p>
+        <h2 class="equipment-group-title">武器</h2>
         <div id="weapon-list" class="weapon-list"></div>
+        <h2 class="equipment-group-title">防具</h2>
+        <div id="armor-list" class="weapon-list"></div>
+        <h2 class="equipment-group-title">アクセサリー</h2>
+        <div id="accessory-list" class="weapon-list"></div>
+      </section>
+
+      <section id="gacha-view" class="view" aria-labelledby="gacha-title">
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>DOODLE GACHA</small><h1 id="gacha-title">装備ガチャ</h1></div><span>天井 <b id="pity-count">0</b>/50</span></div>
+        <section class="gacha-machine">
+          <div class="gacha-star">★</div><h2>文房具ボックス</h2>
+          <p>武器・防具・アクセサリーが登場。50回以内にSSR確定。</p>
+          <div class="gacha-rates"><span>R 75%</span><span>SR 20%</span><span>SSR 5%</span></div>
+          <div class="gacha-currency">ガチャ券 <b id="gacha-ticket-count">0</b>枚 ／ インク <b id="gacha-ink-count">0</b> ／ 設計図 <b id="blueprint-count">0</b></div>
+          <div class="gacha-actions"><button id="gacha-one"><b>1回</b><small>券1枚 または ●120</small></button><button id="gacha-ten"><b>10連</b><small>券10枚 または ●1,080</small></button></div>
+        </section>
+        <p class="section-lead">重複装備はレベル+1と設計図へ変換。設計図1枚につき全能力が0.1%伸びます。</p>
+        <div id="gacha-history" class="gacha-history"></div>
       </section>
 
       <section id="collection-view" class="view" aria-labelledby="collection-title">
         <div class="section-heading"><button class="back-home icon-button">←</button><div><small>COLLECTION</small><h1 id="collection-title">ラクガキ図鑑</h1></div><span id="collection-total">0%</span></div>
         <div class="collection-tabs" role="tablist" aria-label="図鑑の種類">
-          <button id="enemy-book-tab" class="active" role="tab">敵図鑑 <small id="enemy-book-total">0/40</small></button>
+          <button id="enemy-book-tab" class="active" role="tab">キャラクター図鑑 <small id="enemy-book-total">0/80</small></button>
           <button id="card-book-tab" role="tab">ひらめき <small id="card-book-total">0/15</small></button>
         </div>
         <p id="collection-lead" class="section-lead">出会った敵の落書き、特性、出現場所を記録します。未遭遇はシルエット表示。</p>
@@ -133,11 +161,11 @@
           <div><small>冒険開始時の能力</small><b>HP <em id="growth-total-hp">100</em> / 攻撃 <em id="growth-total-attack">13</em></b><p>レベルアップと育成ノートの効果は、毎回の冒険に残ります。</p></div>
         </section>
         <div class="growth-list">
-          <article class="growth-item"><span class="growth-icon red">力</span><div><b>ごんぶと筋力 <i>Lv.<em id="power-level">0</em></i></b><small>冒険開始時の攻撃力 +3</small></div><button data-growth="power"><span>強化</span><small id="power-cost"></small></button></article>
-          <article class="growth-item"><span class="growth-icon green">命</span><div><b>破れない紙 <i>Lv.<em id="vitality-level">0</em></i></b><small>冒険開始時の最大HP +18</small></div><button data-growth="vitality"><span>強化</span><small id="vitality-cost"></small></button></article>
-          <article class="growth-item"><span class="growth-icon blue">会</span><div><b>定規の集中 <i>Lv.<em id="focus-level">0</em></i></b><small>会心率 +1.5%</small></div><button data-growth="focus"><span>強化</span><small id="focus-cost"></small></button></article>
+          <article class="growth-item"><span class="growth-icon red">力</span><div><b>ごんぶと筋力 <i>Lv.<em id="power-level">0</em></i></b><small>冒険開始時の攻撃力 +4・上限なし</small></div><button data-growth="power"><span>強化</span><small id="power-cost"></small></button></article>
+          <article class="growth-item"><span class="growth-icon green">命</span><div><b>破れない紙 <i>Lv.<em id="vitality-level">0</em></i></b><small>冒険開始時の最大HP +24・上限なし</small></div><button data-growth="vitality"><span>強化</span><small id="vitality-cost"></small></button></article>
+          <article class="growth-item"><span class="growth-icon blue">会</span><div><b>定規の集中 <i>Lv.<em id="focus-level">0</em></i></b><small>会心率と会心威力が成長・上限なし</small></div><button data-growth="focus"><span>強化</span><small id="focus-cost"></small></button></article>
         </div>
-        <section class="level-bonus-card"><b>レベルボーナス</b><p>主人公Lv.が1上がるたびに、最大HP +12・攻撃力 +1.7。経験値は戦闘やスケッチ広場で獲得できます。</p></section>
+        <section class="level-bonus-card"><b>長押し強化に対応</b><p>強化ボタンを押し続けると連続でレベルアップします。攻撃・HP・集中に上限はありません。</p></section>
       </section>
     </main>
 
@@ -221,6 +249,17 @@
           <button id="confirm-cancel">やめる</button>
           <button id="confirm-ok">OK</button>
         </div>
+      </div>
+    </section>
+
+    <section id="enemy-detail-modal" class="modal enemy-detail-modal" aria-hidden="true">
+      <div class="modal-sheet enemy-detail-sheet">
+        <button id="close-enemy-detail" class="icon-button enemy-detail-close" aria-label="閉じる">×</button>
+        <canvas id="enemy-detail-canvas" width="260" height="220" aria-label="敵の拡大イラスト"></canvas>
+        <small id="enemy-detail-kicker">CHARACTER FILE</small>
+        <h2 id="enemy-detail-name">？？？？？</h2>
+        <p id="enemy-detail-story"></p>
+        <div id="enemy-detail-stats" class="enemy-detail-stats"></div>
       </div>
     </section>
 

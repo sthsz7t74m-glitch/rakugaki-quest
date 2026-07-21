@@ -1,7 +1,7 @@
 {
   "name": "ラクガキクエスト",
   "short_name": "ラクガキ",
-  "description": "手描きの敵と自分で描いた主人公が全100ステージを戦う育成・放置オートバトル",
+  "description": "手描きの主人公が全200ステージと無限ステージを戦う、装備ガチャ付き育成・放置オートバトル",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#fffdf5",

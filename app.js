@@ -2,7 +2,7 @@
   'use strict';
 
   const SAVE_KEY = 'rakugakiQuestSaveV1';
-  const MAX_STAGE = 100;
+  const MAX_STAGE = 200;
   const BASE_MAX = 20;
   const UAT_REWARD_MULTIPLIER = 1000;
 
@@ -54,7 +54,17 @@
     { id:7, start:61, end:70, name:'方眼宇宙', short:'方眼宇宙', theme:'theme-2', enemies:[['クリップUFO','ufo'],['ケイセン星人','alien'],['計算ドロイド','droid']], boss:['銀河定規Z','robot'] },
     { id:8, start:71, end:80, name:'破れたページ', short:'破れページ', theme:'theme-3', enemies:[['赤インクデーモン','demon'],['筆箱ミミック','mimic'],['三つ首落書き','hydra']], boss:['ページイーター','hydra'] },
     { id:9, start:81, end:90, name:'光のスケッチ', short:'光スケッチ', theme:'theme-4', enemies:[['修正天使','angel'],['石版ゴーレム','golem'],['クレヨン不死鳥','phoenix']], boss:['七色フェニックス','phoenix'] },
-    { id:10, start:91, end:100, name:'最後の白紙', short:'最後の白紙', theme:'theme-5', enemies:[['余白タイタン','titan'],['虚無の触手','void'],['終末ドラゴン','dragon']], boss:['インク神・ゼロ','void'] }
+    { id:10, start:91, end:100, name:'最後の白紙', short:'最後の白紙', theme:'theme-5', enemies:[['余白タイタン','titan'],['虚無の触手','void'],['終末ドラゴン','dragon']], boss:['インク神・ゼロ','void'] },
+    { id:11, start:101, end:110, name:'裏返しノート', short:'裏ノート', theme:'theme-1', enemies:[['鏡うつし棒人間','stickman'],['逆さケシカス','slime'],['裏紙ゴブリン','goblin']], boss:['反転ドラゴン','dragon'] },
+    { id:12, start:111, end:120, name:'落書き水族館', short:'水族館', theme:'theme-2', enemies:[['クリップクラゲ','ghost'],['ホチキスザメ','wolf'],['定規タツノオトシゴ','dragon']], boss:['大王インクダコ','hydra'] },
+    { id:13, start:121, end:130, name:'消しゴム雪原', short:'消し雪原', theme:'theme-3', enemies:[['ねり消しペンギン','bat'],['白紙オオカミ','wolf'],['修正液ゴーレム','golem']], boss:['吹雪のケシゴン','titan'] },
+    { id:14, start:131, end:140, name:'ハサミの峡谷', short:'ハサミ谷', theme:'theme-4', enemies:[['切り抜きニンジャ','ninja'],['紙ふぶきムシ','bug'],['断裁オーガ','ogre']], boss:['巨大裁断バサミ','crab'] },
+    { id:15, start:141, end:150, name:'絵の具の沼', short:'絵の具沼', theme:'theme-5', enemies:[['水彩スライム','slime'],['パレットガニ','crab'],['筆先キノコ','mushroom']], boss:['混色ヒュドラ','hydra'] },
+    { id:16, start:151, end:160, name:'製図機械都市', short:'製図都市', theme:'theme-1', enemies:[['三角定規ロボ','robot'],['コンパスドロイド','droid'],['製図ナイト','knight']], boss:['プロッターX','robot'] },
+    { id:17, start:161, end:170, name:'蛍光ペンの夜', short:'蛍光の夜', theme:'theme-2', enemies:[['マーカーゴースト','ghost'],['光るデーモン','demon'],['ネオンUFO','ufo']], boss:['蛍光不死鳥','phoenix'] },
+    { id:18, start:171, end:180, name:'破線の迷宮', short:'破線迷宮', theme:'theme-3', enemies:[['点線スパイダー','spider'],['迷路ミミック','mimic'],['破線ニンジャ','ninja']], boss:['方眼ミノタウロス','ogre'] },
+    { id:19, start:181, end:190, name:'百色の空', short:'百色の空', theme:'theme-4', enemies:[['虹ペン天使','angel'],['クレヨンタイタン','titan'],['七彩ドラゴン','dragon']], boss:['百色フェニックス','phoenix'] },
+    { id:20, start:191, end:200, name:'無限のスケッチ', short:'無限スケッチ', theme:'theme-5', enemies:[['未完の巨人','golem'],['永遠の余白','void'],['始まりの棒人間','stickman']], boss:['創造主・ラクガキ','void'] }
   ].map(ch => ({...ch, reward:{ink:50*ch.id+ch.id*ch.id*12, parts:4+ch.id*3, xp:20+ch.id*18}}));
 
   const WEAPONS = [
@@ -63,7 +73,31 @@
     {id:'crayon', name:'魔法クレヨン', icon:'🖍️', type:'魔法', unlock:30, attack:.28, pierce:.12, effect:'敵の装甲を一部無視'},
     {id:'eraser', name:'巨大消しゴム', icon:'▰', type:'近接', unlock:50, attack:.38, hp:.12, effect:'HPも増える重量武器'},
     {id:'compass', name:'星のコンパス', icon:'🧭', type:'遠距離', unlock:70, attack:.5, crit:.1, effect:'高い会心率を持つ伝説武器'},
-    {id:'rainbow', name:'虹色万年筆', icon:'🖋️', type:'魔法', unlock:100, attack:.7, pierce:.25, effect:'すべてを描き直す最終武器'}
+    {id:'rainbow', name:'虹色万年筆', icon:'✒', type:'魔法', unlock:100, attack:.7, pierce:.25, effect:'装甲を大きく無視する'},
+    {id:'stapler', name:'連射ホチキス', icon:'⊏', type:'遠距離', unlock:110, attack:.78, crit:.08, effect:'鋭い針を連射する'},
+    {id:'brush', name:'大筆ブレード', icon:'〆', type:'近接', unlock:130, attack:.9, hp:.16, effect:'攻撃とHPを同時に強化'},
+    {id:'scissors', name:'次元ハサミ', icon:'✂', type:'近接', unlock:150, attack:1.02, crit:.12, effect:'高い会心率を持つ'},
+    {id:'marker', name:'蛍光レールガン', icon:'▰', type:'遠距離', unlock:170, attack:1.16, pierce:.2, effect:'装甲を貫く蛍光弾'},
+    {id:'palette', name:'百色パレット', icon:'◉', type:'魔法', unlock:190, attack:1.32, crit:.1, pierce:.18, effect:'会心と貫通を両立'},
+    {id:'creator', name:'創造のペン', icon:'★', type:'魔法', unlock:200, attack:1.55, crit:.15, pierce:.3, effect:'200面の先へ進む究極装備'}
+  ];
+
+  const ARMORS = [
+    {id:'paperVest',name:'厚紙ベスト',icon:'▤',rarity:'R',hp:.12,guard:.02,effect:'最大HP +12%'},
+    {id:'eraserMail',name:'ねり消しメイル',icon:'▣',rarity:'R',hp:.18,guard:.04,effect:'HP +18%・軽減 +4%'},
+    {id:'rulerArmor',name:'定規アーマー',icon:'目',rarity:'SR',hp:.24,guard:.07,effect:'HP +24%・軽減 +7%'},
+    {id:'notebookPlate',name:'ノート装甲',icon:'冊',rarity:'SR',hp:.34,guard:.05,effect:'最大HP +34%'},
+    {id:'rainbowCoat',name:'七色コート',icon:'彩',rarity:'SSR',hp:.42,guard:.1,effect:'HP +42%・軽減 +10%'},
+    {id:'infinitePage',name:'無限ページの鎧',icon:'∞',rarity:'SSR',hp:.55,guard:.12,effect:'HP +55%・軽減 +12%'}
+  ];
+
+  const ACCESSORIES = [
+    {id:'clipCharm',name:'クリップのお守り',icon:'∪',rarity:'R',attack:.06,effect:'攻撃力 +6%'},
+    {id:'sharpener',name:'金の鉛筆削り',icon:'◇',rarity:'R',crit:.04,effect:'会心率 +4%'},
+    {id:'tapeRing',name:'修正テープの輪',icon:'○',rarity:'SR',attack:.1,hp:.1,effect:'攻撃・HP +10%'},
+    {id:'compassEye',name:'コンパスの眼',icon:'⌖',rarity:'SR',crit:.08,pierce:.08,effect:'会心・貫通 +8%'},
+    {id:'inkHeart',name:'インクの心臓',icon:'♥',rarity:'SSR',attack:.18,hp:.2,effect:'攻撃 +18%・HP +20%'},
+    {id:'creatorSeal',name:'創造主のしおり',icon:'★',rarity:'SSR',attack:.25,crit:.1,pierce:.12,effect:'攻撃・会心・貫通を強化'}
   ];
 
   const CARDS = [
@@ -92,18 +126,20 @@
   ];
 
   const TUTORIAL = [
-    {icon:'📓',kicker:'はじめに',title:'消えかけた世界を描き直そう',copy:'描いた主人公と一緒に全100ステージへ挑戦します。\n10ステージごとに敵の世界とボスが変化します。'},
+    {icon:'📓',kicker:'はじめに',title:'消えかけた世界を描き直そう',copy:'描いた主人公と一緒に全200ステージへ挑戦します。\nクリア後は通常敵だけの無限ノートにも挑めます。'},
     {icon:'✎',kicker:'STEP 1',title:'主人公を自由に描く',copy:'形や大きさで性能は変わりません。\n好きな主人公を指やマウスで描いてください。'},
     {icon:'⚔',kicker:'STEP 2',title:'戦闘は自動、準備が勝負',copy:'敵ごとに耐久・攻撃・速度・特性が違います。\n戦力と推奨戦力を見て、武器や永久能力を育てましょう。'},
-    {icon:'💡',kicker:'STEP 3',title:'冒険中のひらめき',copy:'戦闘後は3枚から一時強化を1つ選択。\n組み合わせ次第で格上のボスにも勝てます。'},
+    {icon:'💡',kicker:'STEP 3',title:'冒険中のひらめき',copy:'戦闘後は3枚から一時強化を1つ選択。\n完全自動モードなら相性のよい報酬を自動で選びます。'},
     {icon:'⌂',kicker:'STEP 4',title:'放置中も素材を集める',copy:'拠点の施設はゲームを閉じても最大12時間働きます。\n拠点Lv.5と10で、同時に動かせる施設が増えます。'},
-    {icon:'🗺️',kicker:'STEP 5',title:'好きなステージへ再挑戦',copy:'クリア済みステージはステージ選択から何度でも遊べます。\nボス撃破で新しい武器も解放されます。'}
+    {icon:'★',kicker:'STEP 5',title:'装備とガチャで強くなる',copy:'武器・防具・アクセサリーはすべて上限なし。\nゲーム内報酬だけで装備ガチャを回せます。'},
+    {icon:'🗺️',kicker:'STEP 6',title:'好きなステージへ再挑戦',copy:'クリア済みステージは何度でも遊べます。\nエンドレスノートでは通常敵と永遠に連戦できます。'}
   ];
 
   const defaultSave = () => ({
     ink:0, parts:0, xp:0, heroLevel:1, heroName:'ななしのラクガキ', heroImage:'', bestStage:0,
     selectedStage:1, baseLevel:1, assigned:['ink'], lastClaim:Date.now(), discovered:[], enemyBook:{}, bossSeen:{},
-    growth:{power:0,vitality:0,focus:0}, weapons:{pencil:1}, equippedWeapon:'pencil', chapterClears:{}, tutorialSeen:false
+    growth:{power:0,vitality:0,focus:0}, weapons:{pencil:1}, equippedWeapon:'pencil', armors:{paperVest:1}, equippedArmor:'paperVest', accessories:{clipCharm:1}, equippedAccessory:'clipCharm',
+    tickets:10, blueprints:0, pity:0, gachaHistory:[], autoMode:false, endlessBest:0, chapterClears:{}, tutorialSeen:false
   });
 
   const $ = selector => document.querySelector(selector);
@@ -124,6 +160,8 @@
       const merged = {...defaultSave(),...raw};
       merged.growth = {...defaultSave().growth,...(raw.growth||{})};
       merged.weapons = {...defaultSave().weapons,...(raw.weapons||{})};
+      merged.armors = {...defaultSave().armors,...(raw.armors||{})};
+      merged.accessories = {...defaultSave().accessories,...(raw.accessories||{})};
       merged.chapterClears = {...(raw.chapterClears||{})};
       merged.bossSeen = typeof raw.bossSeen === 'object' && raw.bossSeen ? raw.bossSeen : {};
       merged.enemyBook = typeof raw.enemyBook === 'object' && raw.enemyBook ? raw.enemyBook : {};
@@ -131,6 +169,8 @@
       merged.discovered = Array.isArray(merged.discovered) ? merged.discovered : [];
       merged.selectedStage = Math.max(1,Math.min(MAX_STAGE,Number(merged.selectedStage)||1));
       if(!WEAPONS.some(w=>w.id===merged.equippedWeapon))merged.equippedWeapon='pencil';
+      if(!ARMORS.some(w=>w.id===merged.equippedArmor))merged.equippedArmor='paperVest';
+      if(!ACCESSORIES.some(w=>w.id===merged.equippedAccessory))merged.equippedAccessory='clipCharm';
       unlockEarnedWeapons(merged);
       return merged;
     }catch{return defaultSave()}
@@ -138,46 +178,61 @@
   function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(data));renderHeader()}
   function unlockEarnedWeapons(target=data){WEAPONS.forEach(w=>{if((target.bestStage||0)>=w.unlock&&!target.weapons[w.id])target.weapons[w.id]=1})}
   function xpNeeded(){return data.heroLevel*25}
-  function chapterFor(stage){return CHAPTERS.find(ch=>stage>=ch.start&&stage<=ch.end)||CHAPTERS[9]}
+  function chapterFor(stage){return CHAPTERS.find(ch=>stage>=ch.start&&stage<=ch.end)||CHAPTERS.at(-1)}
   function enemyCatalog(){return CHAPTERS.flatMap(ch=>[...ch.enemies.map(([name,type])=>({name,type,chapter:ch.id,boss:false})),{name:ch.boss[0],type:ch.boss[1],chapter:ch.id,boss:true}])}
   function enemyBookCount(){return enemyCatalog().filter(enemy=>data.enemyBook[enemy.name]).length}
   function enemyBookPercent(){return Math.round(enemyBookCount()/enemyCatalog().length*100)}
   function currentChapter(){return chapterFor(Math.min(MAX_STAGE,Math.max(1,data.bestStage+1)))}
   function equippedWeapon(){return WEAPONS.find(w=>w.id===data.equippedWeapon)||WEAPONS[0]}
+  function equippedArmor(){return ARMORS.find(w=>w.id===data.equippedArmor)||ARMORS[0]}
+  function equippedAccessory(){return ACCESSORIES.find(w=>w.id===data.equippedAccessory)||ACCESSORIES[0]}
   function weaponLevel(w=equippedWeapon()){return data.weapons[w.id]||1}
+  function gearLevel(kind,item){return data[kind][item.id]||1}
   function startingStats(){
-    const w=equippedWeapon(),level=weaponLevel(w),weaponScale=w.attack+(level-1)*.06;
-    const baseHp=110+(data.heroLevel-1)*12+data.growth.vitality*18;
+    const w=equippedWeapon(),armor=equippedArmor(),accessory=equippedAccessory(),level=weaponLevel(w),armorLevel=gearLevel('armors',armor),accessoryLevel=gearLevel('accessories',accessory);
+    const weaponScale=w.attack+(level-1)*.055,armorScale=(armor.hp||0)+(armorLevel-1)*.035,accessoryAttack=(accessory.attack||0)+(accessoryLevel-1)*.025;
+    const blueprintScale=1+(data.blueprints||0)*.001,baseHp=(120+(data.heroLevel-1)*15+data.growth.vitality*24)*blueprintScale;
     return {
-      maxHp:Math.round(baseHp*(1+(w.hp||0))),
-      attack:Math.round((13+(data.heroLevel-1)*1.7+data.growth.power*3)*(1+weaponScale)*10)/10,
-      crit:Math.min(.55,.08+data.growth.focus*.015+(w.crit||0)),
-      pierce:(w.pierce||0)+(level-1)*.006,
-      weapon:w
+      maxHp:Math.round(baseHp*(1+(w.hp||0)+armorScale+(accessory.hp||0)+(accessoryLevel-1)*.018)),
+      attack:Math.round((14+(data.heroLevel-1)*2+data.growth.power*4)*(1+weaponScale+accessoryAttack)*blueprintScale*10)/10,
+      crit:Math.min(.75,.08+data.growth.focus*.012+(w.crit||0)+(accessory.crit||0)),
+      critDamage:2.1+data.growth.focus*.025,
+      pierce:Math.min(.9,(w.pierce||0)+(level-1)*.006+(accessory.pierce||0)),
+      permanentGuard:Math.min(.55,(armor.guard||0)+(armorLevel-1)*.006),
+      weapon:w,armor,accessory
     };
   }
   function playerPower(stats=startingStats()){
-    return Math.round(stats.maxHp*.45+stats.attack*8+stats.crit*150+stats.pierce*120);
+    return Math.round(stats.maxHp*.42+stats.attack*8.5+stats.crit*180+(stats.critDamage||2)*35+stats.pierce*140+(stats.permanentGuard||0)*240);
   }
-  function recommendedPower(stage){return Math.round(100*Math.pow(1.032,stage-1)*(stage%10===0?1.42:1))}
+  function recommendedPower(stage){const chapterIndex=Math.floor((stage-1)/10),chapterStep=(stage-1)%10,chapterScale=Math.pow(1.26,chapterIndex),stageSlope=1+chapterStep*.03;return Math.round(105*chapterScale*stageSlope*(stage%10===0?1.28:1))}
 
   function renderHeader(){
     const chapter=currentChapter(),need=xpNeeded(),stats=startingStats(),weapon=equippedWeapon();
-    $('#ink-count').textContent=Math.floor(data.ink);$('#parts-count').textContent=Math.floor(data.parts);
+    $('#ink-count').textContent=Math.floor(data.ink);$('#parts-count').textContent=Math.floor(data.parts);$('#ticket-count').textContent=Math.floor(data.tickets||0);
     $('#hero-level').textContent=data.heroLevel;$('#hero-name').textContent=data.heroName;$('#battle-hero-name').textContent=data.heroName;
     $('#best-stage').textContent=data.bestStage;$('#chapter-progress').style.width=`${Math.min(100,data.bestStage/MAX_STAGE*100)}%`;
     $('#home-chapter-number').textContent=`CHAPTER ${chapter.id}${data.bestStage>=MAX_STAGE?' / ALL CLEAR':''}`;$('#home-chapter-name').textContent=chapter.name;
     $('#hero-xp-copy').textContent=`EXP ${Math.floor(data.xp)} / ${need}`;$('#hero-xp-bar').style.width=`${Math.min(100,data.xp/need*100)}%`;
     $('#card-count-copy').textContent=`敵 ${enemyBookPercent()}%・強化 ${Math.round(data.discovered.length/CARDS.length*100)}%`;
-    $('#growth-summary').textContent=`戦力 ${playerPower(stats)}・HP ${stats.maxHp}・攻撃 ${Math.round(stats.attack)}`;
+    $('#growth-summary').textContent=`戦力 ${playerPower(stats)}・HP ${stats.maxHp}・攻撃 ${Math.round(stats.attack)}・上限なし`;
     const activeNames=data.assigned.map(id=>FACILITIES.find(f=>f.id===id)?.name.replace('経験値','')||id).join('・');
     $('#base-summary').textContent=`Lv.${data.baseLevel} / MAX ${BASE_MAX}・稼働中：${activeNames}`;
-    $('#weapon-summary').textContent=`${weapon.name} Lv.${weaponLevel(weapon)}・${weapon.type}`;
+    $('#weapon-summary').textContent=`${weapon.name} Lv.${weaponLevel(weapon)}＋防具・アクセ`;
+    $('#gacha-summary').textContent=`SSR天井まで ${Math.max(1,50-(data.pity||0))}回`;
+    $('#endless-best').textContent=data.endlessBest||0;
+    $('#auto-mode').checked=!!data.autoMode;
     const map=$('#chapter-map');map.innerHTML='';
     CHAPTERS.forEach(ch=>{const node=document.createElement('span'),cleared=data.bestStage>=ch.end,current=chapter.id===ch.id;node.className=`chapter-node ${cleared?'cleared':''} ${current?'current':''}`;node.innerHTML=`<b>${cleared?'✓ ':''}${ch.id}. ${ch.short}</b>${ch.start}–${ch.end}`;map.appendChild(node)});
     renderHeroPreview();
   }
   function showView(id){$$('.view').forEach(view=>view.classList.toggle('active',view.id===id));window.scrollTo(0,0)}
+  function bindHoldButtons(buttons,action){
+    buttons.filter(Boolean).forEach(button=>{button._holdAction=()=>{if(!button.disabled)action(button)};if(button.dataset.holdBound)return;button.dataset.holdBound='1';let delay=0,repeater=0,fired=false;const clear=()=>{clearTimeout(delay);clearInterval(repeater)};
+      button.addEventListener('pointerdown',e=>{if(button.disabled)return;e.preventDefault();fired=false;button.setPointerCapture?.(e.pointerId);delay=setTimeout(()=>{fired=true;button._holdAction();repeater=setInterval(()=>button._holdAction(),110)},360)});
+      button.addEventListener('pointerup',e=>{clear();if(!button.disabled&&!fired)button._holdAction();if(button.hasPointerCapture?.(e.pointerId))button.releasePointerCapture(e.pointerId)});button.addEventListener('pointercancel',clear);button.addEventListener('click',e=>{e.preventDefault();if(e.detail===0)button._holdAction()});
+    })
+  }
   function syncModalLock(){
     const hasOpen=$$('.modal.open').length>0;
     if(hasOpen&&!document.body.classList.contains('modal-open')){lockedScrollY=window.scrollY;document.body.style.top=`-${lockedScrollY}px`;document.body.classList.add('modal-open')}
@@ -326,40 +381,46 @@
   }
   function enemyFor(stage,rollVariant=false){
     const chapter=chapterFor(stage),boss=stage===chapter.end,entry=boss?chapter.boss:chapter.enemies[(stage-chapter.start)%chapter.enemies.length],type=ENEMY_TYPES[entry[1]],variant=rollVariant?chooseEnemyVariant(stage,boss):ENEMY_VARIANTS[0];
-    const hp=Math.round(90*Math.pow(1.047,stage-1)*type.hp*(boss?2.25:1)*(variant.hp||1));
-    const damage=Math.round(5.5*Math.pow(1.032,stage-1)*type.damage*(boss?1.35:1)*(variant.damage||1));
+    const chapterIndex=Math.floor((stage-1)/10),chapterStep=(stage-1)%10,hpGrowth=Math.pow(1.3,chapterIndex),damageGrowth=Math.pow(1.14,chapterIndex),chapterHpRamp=1+chapterStep*.035,chapterDamageRamp=1+chapterStep*.025;
+    const hp=Math.round(82*hpGrowth*chapterHpRamp*type.hp*(boss?1.9:1)*(variant.hp||1));
+    const damage=Math.round(4.6*damageGrowth*chapterDamageRamp*type.damage*(boss?1.25:1)*(variant.damage||1));
     return {...type,name:entry[0],type:entry[1],boss,hp,damage,variant,speed:(type.speed||1)*(variant.speed||1),reward:(type.reward||1)*(variant.reward||1),chapter:chapter.id};
   }
-  function beginRun(stage){
+  function endlessEnemy(wave){
+    const catalog=enemyCatalog().filter(x=>!x.boss),entry=catalog[Math.floor(Math.random()*catalog.length)],type=ENEMY_TYPES[entry.type],variant=chooseEnemyVariant(Math.min(MAX_STAGE,Math.max(1,data.bestStage)),false),scaleStage=Math.min(MAX_STAGE,Math.max(1,data.bestStage-8+wave));
+    const base=enemyFor(scaleStage,false),scale=Math.pow(1.045,Math.max(0,wave-1));
+    return {...type,...entry,boss:false,hp:Math.round(base.hp*scale*(variant.hp||1)),damage:Math.round(base.damage*Math.pow(1.025,wave-1)*(variant.damage||1)),variant,speed:(type.speed||1)*(variant.speed||1),reward:(type.reward||1)*(variant.reward||1),chapter:entry.chapter};
+  }
+  function beginRun(stage,endless=false){
     if(!data.heroImage){openDrawing();toast('まずは主人公を描こう！');return}
     const unlocked=Math.min(MAX_STAGE,data.bestStage+1),chosen=Math.max(1,Math.min(unlocked,Number(stage)||data.selectedStage||unlocked)),stats=startingStats();
-    data.selectedStage=chosen;save();
-    run={stage:chosen,startStage:chosen,hp:stats.maxHp,maxHp:stats.maxHp,attack:stats.attack,interval:1450,guard:0,crit:stats.crit,leech:0,double:0,bossBonus:0,pierce:stats.pierce,ideas:0,cards:[],enemyHp:0,enemyMaxHp:0,active:false,speed:1,weapon:stats.weapon};
+    if(!endless)data.selectedStage=chosen;save();
+    run={stage:chosen,startStage:chosen,endless,wave:1,hp:stats.maxHp,maxHp:stats.maxHp,attack:stats.attack,interval:1450,guard:stats.permanentGuard||0,crit:stats.crit,critDamage:stats.critDamage||2.1,leech:0,double:0,bossBonus:0,pierce:stats.pierce,ideas:0,cards:[],enemyHp:0,enemyMaxHp:0,active:false,speed:1,weapon:stats.weapon};
     showView('battle-view');prepareBattle();
   }
   function prepareBattle(){
-    clearTimeout(battleTimer);const chapter=chapterFor(run.stage),enemy=enemyFor(run.stage,true);
+    clearTimeout(battleTimer);const chapter=chapterFor(run.stage),enemy=run.endless?endlessEnemy(run.wave):enemyFor(run.stage,true);
     run.enemy=enemy;run.enemyHp=run.enemyMaxHp=enemy.hp;run.active=false;
-    $('#stage-number').textContent=run.stage;$('#battle-chapter').textContent=`CHAPTER ${chapter.id}・${chapter.name}・推奨戦力 ${recommendedPower(run.stage)}`;
+    $('#stage-number').textContent=run.endless?`∞-${run.wave}`:run.stage;$('#battle-chapter').textContent=run.endless?`ENDLESS NOTE・通常敵連戦・最高 ${data.endlessBest||0}`:`CHAPTER ${chapter.id}・${chapter.name}・推奨戦力 ${recommendedPower(run.stage)}`;
     $('#enemy-name').textContent=enemy.name;$('#enemy-trait').textContent=`${enemy.variant.name}・${enemy.trait}`;
     const scene=$('#battle-scene');scene.className=`battle-scene ${chapter.theme} weapon-${run.weapon.type==='近接'?'melee':run.weapon.type==='遠距離'?'range':'magic'}`;
     const art=$('#enemy-art');art.className=`enemy-art enemy-${enemy.type}`;
     drawEnemyArt($('#enemy-canvas'),enemy);
     const record=data.enemyBook[enemy.name]||{count:0,variants:[]};record.count++;if(!record.variants.includes(enemy.variant.id))record.variants.push(enemy.variant.id);record.lastStage=run.stage;data.enemyBook[enemy.name]=record;save();
-    $('#enemy-fighter').classList.toggle('boss',enemy.boss);$('#battle-action').disabled=true;$('#battle-action').textContent='戦闘中…';$('#battle-hero').src=heroSrc();$('#speed-button').textContent='×1';updateBattleUI();
+    $('#enemy-fighter').classList.toggle('boss',enemy.boss);$('#battle-action').disabled=true;$('#battle-action').textContent='戦闘中…';$('#battle-hero').src=heroSrc();$('#speed-button').textContent=`×${run.speed}`;$('#auto-badge').classList.toggle('hidden',!data.autoMode);updateBattleUI();
     if(enemy.boss&&!data.bossSeen[chapter.id]){showDialog(bossIntro(chapter),()=>{data.bossSeen[chapter.id]=true;save();startBattle()})}else startBattle();
   }
-  function bossIntro(chapter){return [[chapter.boss[0],`ステージ${chapter.end}まで来たか。ここから先は通さない！`],[data.heroName,'なら、このページごと描き直す！'],[chapter.boss[0],chapter.id===10?'最後の白紙で消えてしまえ！':'その武器ごと消してやる！']]}
+  function bossIntro(chapter){return [[chapter.boss[0],`ステージ${chapter.end}まで来たか。ここから先は通さない！`],[data.heroName,'なら、このページごと描き直す！'],[chapter.boss[0],chapter.id===20?'最後の白紙で消えてしまえ！':'その武器ごと消してやる！']]}
   function startBattle(){
     run.active=true;
-    const loop=()=>{if(!run?.active)return;playerAttack();if(run?.active)battleTimer=setTimeout(enemyAttack,Math.max(430,780/(run.enemy.speed||1))/run.speed)};
+    const loop=()=>{if(!run?.active)return;playerAttack();if(run?.active)battleTimer=setTimeout(enemyAttack,Math.max(560,980/(run.enemy.speed||1))/run.speed)};
     battleTimer=setTimeout(loop,900/run.speed);run.loop=loop;
   }
   function playerAttack(){
     if(!run?.active)return;
     const enemy=run.enemy;
     if(Math.random()<(enemy.evade||0)){animateHit('player','MISS');battleTimer=setTimeout(run.loop,run.interval/run.speed);return}
-    let armor=Math.max(0,(enemy.armor||0)-run.pierce),damage=run.attack*(enemy.boss?1+run.bossBonus:1)*(1-armor);const critical=Math.random()<run.crit;if(critical)damage*=2.2;damage=Math.max(1,Math.round(damage));
+    let armor=Math.max(0,(enemy.armor||0)-run.pierce),damage=run.attack*(enemy.boss?1+run.bossBonus:1)*(1-armor);const critical=Math.random()<run.crit;if(critical)damage*=run.critDamage;damage=Math.max(1,Math.round(damage));
     run.enemyHp=Math.max(0,run.enemyHp-damage);run.hp=Math.min(run.maxHp,run.hp+run.maxHp*run.leech);animateHit('player',critical?`会心 ${damage}!`:`${damage}`);tone(critical?520:330,.075,critical?'sawtooth':'square');
     if(enemy.thorns)run.hp=Math.max(1,run.hp-Math.round(damage*enemy.thorns));
     if(enemy.weaken)run.attack=Math.max(1,run.attack*(1-enemy.weaken*.15));
@@ -376,28 +437,31 @@
   function updateBattleUI(){
     if(!run)return;$('#player-hp-text').textContent=`${Math.ceil(run.hp)} / ${run.maxHp}`;$('#enemy-hp-text').textContent=`${Math.ceil(run.enemyHp)} / ${run.enemyMaxHp}`;
     $('#player-hp-bar').style.width=`${Math.max(0,100*run.hp/run.maxHp)}%`;$('#enemy-hp-bar').style.width=`${Math.max(0,100*run.enemyHp/run.enemyMaxHp)}%`;
-    $('#power-stat').textContent=playerPower({maxHp:run.maxHp,attack:run.attack,crit:run.crit,pierce:run.pierce});$('#attack-stat').textContent=Math.round(run.attack);$('#speed-stat').textContent=(1450/run.interval).toFixed(1);$('#idea-count').textContent=run.ideas;
+    $('#power-stat').textContent=playerPower({maxHp:run.maxHp,attack:run.attack,crit:run.crit,critDamage:run.critDamage,pierce:run.pierce,permanentGuard:run.guard});$('#attack-stat').textContent=Math.round(run.attack);$('#speed-stat').textContent=(1450/run.interval).toFixed(1);$('#idea-count').textContent=run.ideas;
   }
   function winBattle(){
     run.active=false;clearTimeout(battleTimer);const chapter=chapterFor(run.stage),enemy=run.enemy,firstClear=run.stage>data.bestStage,rewardMult=enemy.reward||1;
-    data.bestStage=Math.max(data.bestStage,run.stage);data.ink+=(3+Math.ceil(run.stage/4))*rewardMult;data.parts+=run.stage%5===0?1:0;data.xp+=(5+chapter.id*2)*rewardMult;data.selectedStage=Math.min(MAX_STAGE,Math.max(data.selectedStage,run.stage+1));unlockEarnedWeapons();levelCheck();save();splash('CLEAR!');
+    if(run.endless){data.endlessBest=Math.max(data.endlessBest||0,run.wave);data.ink+=(8+Math.ceil(run.wave/2))*rewardMult;data.xp+=(8+Math.ceil(run.wave/3))*rewardMult;if(run.wave%10===0)data.tickets=(data.tickets||0)+1;levelCheck();save();splash(`WAVE ${run.wave} CLEAR!`);setTimeout(()=>{run.wave++;run.hp=Math.min(run.maxHp,run.hp+Math.round(run.maxHp*.12));if((run.wave-1)%5===0)showCardChoices();else prepareBattle()},800);return}
+    data.bestStage=Math.max(data.bestStage,run.stage);data.ink+=(4+Math.ceil(run.stage/4))*rewardMult;data.parts+=run.stage%5===0?1:0;data.xp+=(6+chapter.id*2)*rewardMult;if(run.stage%10===0)data.tickets=(data.tickets||0)+1;data.selectedStage=Math.min(MAX_STAGE,Math.max(data.selectedStage,run.stage+1));unlockEarnedWeapons();levelCheck();save();splash('CLEAR!');
     if(enemy.boss){setTimeout(()=>showDialog([[chapter.boss[0],bossOutro(chapter.id)],[data.heroName,'このページにも、色が戻ってきた！']],()=>finishChapter(chapter,firstClear)),1000);return}
     setTimeout(showCardChoices,1000);
   }
-  function bossOutro(id){return id===10?'白紙は終わりじゃない……次に描くための場所だったのか。':id%3===1?'ま、まぶしい……！色って、ちょっと良いかも……':id%3===2?'その線、はみ出してるのに……強い。':'こんなににぎやかなページになるとは……。'}
+  function bossOutro(id){return id===20?'描き終わりはない。次の線は、無限に続く……。':id%3===1?'ま、まぶしい……！色って、ちょっと良いかも……':id%3===2?'その線、はみ出してるのに……強い。':'こんなににぎやかなページになるとは……。'}
   function showCardChoices(){
     const choices=[...CARDS].sort(()=>Math.random()-.5).slice(0,3),box=$('#card-options');box.innerHTML='';
-    choices.forEach(card=>{const button=document.createElement('button');button.className=`choice-card ${card.rarity==='レア'?'rare':card.rarity==='伝説'?'legend':''}`;button.innerHTML=`<span class="card-emoji">${card.icon}</span><span><b>${card.name}</b><small>${card.desc}</small></span><i>›</i>`;button.onclick=()=>{card.effect(run);run.ideas++;run.cards.push(card.id);if(!data.discovered.includes(card.id))data.discovered.push(card.id);save();closeModal('#card-modal');run.stage++;run.hp=Math.min(run.maxHp,run.hp+Math.round(run.maxHp*.15));prepareBattle()};box.appendChild(button)});openModal('#card-modal');
+    const choose=card=>{card.effect(run);run.ideas++;run.cards.push(card.id);if(!data.discovered.includes(card.id))data.discovered.push(card.id);save();closeModal('#card-modal');if(!run.endless)run.stage++;run.hp=Math.min(run.maxHp,run.hp+Math.round(run.maxHp*.15));prepareBattle()};
+    choices.forEach(card=>{const button=document.createElement('button');button.className=`choice-card ${card.rarity==='レア'?'rare':card.rarity==='伝説'?'legend':''}`;button.innerHTML=`<span class="card-emoji">${card.icon}</span><span><b>${card.name}</b><small>${card.desc}</small></span><i>›</i>`;button.onclick=()=>choose(card);box.appendChild(button)});
+    if(data.autoMode){const score={通常:1,レア:2,伝説:3},best=[...choices].sort((a,b)=>score[b.rarity]-score[a.rarity])[0];toast(`AUTO：${best.name}を選択`);setTimeout(()=>choose(best),520)}else openModal('#card-modal');
   }
   function loseRun(){
     run.active=false;clearTimeout(battleTimer);const bonus=2+chapterFor(run.stage).id*2;data.ink+=bonus;save();$('#battle-action').disabled=false;$('#battle-action').textContent=`拠点へ戻る（インク +${bonus}）`;$('#battle-action').onclick=()=>{run=null;showView('home-view');renderHeader()};splash('敗北…');
   }
   function finishChapter(chapter,firstClear){
     const multiplier=firstClear?1:.3,reward={ink:Math.round(chapter.reward.ink*multiplier),parts:Math.max(1,Math.round(chapter.reward.parts*multiplier)),xp:Math.round(chapter.reward.xp*multiplier)};
-    data.ink+=reward.ink;data.parts+=reward.parts;data.xp+=reward.xp;data.chapterClears[chapter.id]=(data.chapterClears[chapter.id]||0)+1;data.selectedStage=chapter.id<10?chapter.end+1:100;unlockEarnedWeapons();levelCheck();save();run.active=false;
+    data.ink+=reward.ink;data.parts+=reward.parts;data.xp+=reward.xp;data.tickets=(data.tickets||0)+(firstClear?2:0);data.chapterClears[chapter.id]=(data.chapterClears[chapter.id]||0)+1;data.selectedStage=chapter.id<CHAPTERS.length?chapter.end+1:MAX_STAGE;unlockEarnedWeapons();levelCheck();save();run.active=false;
     const unlockedWeapon=WEAPONS.find(w=>w.unlock===chapter.end);
-    $('#chapter-clear-kicker').textContent=chapter.id===10?'ALL 100 STAGES CLEAR!':'CHAPTER CLEAR!';$('#chapter-clear-icon').textContent=chapter.id===10?'★':'✓';
-    $('#chapter-clear-title').textContent=chapter.id===10?'100ステージ完全制覇！':`CHAPTER ${chapter.id} 突破！`;
+    $('#chapter-clear-kicker').textContent=chapter.id===CHAPTERS.length?'ALL 200 STAGES CLEAR!':'CHAPTER CLEAR!';$('#chapter-clear-icon').textContent=chapter.id===CHAPTERS.length?'★':'✓';
+    $('#chapter-clear-title').textContent=chapter.id===CHAPTERS.length?'200ステージ完全制覇！':`CHAPTER ${chapter.id} 突破！`;
     $('#chapter-clear-copy').textContent=`「${chapter.name}」をクリア。${unlockedWeapon?`新武器「${unlockedWeapon.name}」を入手しました！`:'クリア済みステージは何度でも再挑戦できます。'}`;
     $('#chapter-rewards').innerHTML=`<span>● +${reward.ink}</span><span>✂ +${reward.parts}</span><span>☆ +${reward.xp}</span>${unlockedWeapon?`<span>${unlockedWeapon.icon} NEW</span>`:''}`;
     closeModal('#dialog-modal');openModal('#chapter-modal');
@@ -407,20 +471,24 @@
 
   function renderGrowth(){
     const stats=startingStats();$('#growth-hero-level').textContent=data.heroLevel;$('#growth-total-hp').textContent=stats.maxHp;$('#growth-total-attack').textContent=Math.round(stats.attack);
-    const defs={power:{max:40,currency:'ink',base:25,step:22,label:'インク'},vitality:{max:40,currency:'ink',base:25,step:22,label:'インク'},focus:{max:20,currency:'parts',base:2,step:2,label:'素材'}};
-    Object.entries(defs).forEach(([id,def])=>{const level=data.growth[id],cost=def.base+level*def.step,button=$(`[data-growth="${id}"]`),max=level>=def.max,affordable=data[def.currency]>=cost;$(`#${id}-level`).textContent=level;$(`#${id}-cost`).textContent=max?'MAX':`${def.label} ${cost}`;button.disabled=max||!affordable;button.classList.toggle('unaffordable',!max&&!affordable);button.dataset.cost=cost;button.dataset.currency=def.currency});
+    const defs={power:{currency:'ink',base:25,step:18,label:'インク'},vitality:{currency:'ink',base:25,step:18,label:'インク'},focus:{currency:'parts',base:2,step:1.5,label:'素材'}};
+    Object.entries(defs).forEach(([id,def])=>{const level=data.growth[id],cost=Math.ceil(def.base+level*def.step+Math.pow(level,1.32)*1.7),button=$(`[data-growth="${id}"]`),affordable=data[def.currency]>=cost;$(`#${id}-level`).textContent=level;$(`#${id}-cost`).textContent=`${def.label} ${cost}`;button.disabled=!affordable;button.classList.toggle('unaffordable',!affordable);button.dataset.cost=cost;button.dataset.currency=def.currency});
+    bindHoldButtons($$('.growth-item button'),button=>upgradeGrowth(button.dataset.growth));
   }
   function upgradeGrowth(id){const button=$(`[data-growth="${id}"]`),cost=Number(button.dataset.cost),currency=button.dataset.currency;if(button.disabled)return;if(data[currency]<cost){toast(`${currency==='ink'?'インク':'素材'}が${Math.ceil(cost-data[currency])}足りません`);return}data[currency]-=cost;data.growth[id]++;save();renderGrowth();tone(540,.12,'triangle');toast('永久能力が強くなった！')}
 
   function renderBase(){
     $('#base-level').textContent=data.baseLevel;const cost=40+(data.baseLevel-1)*35,atMax=data.baseLevel>=BASE_MAX,affordable=data.ink>=cost;$('#upgrade-cost').textContent=atMax?'MAX 強化済み':`インク ${cost}`;$('#upgrade-base').disabled=atMax||!affordable;$('#upgrade-base').classList.toggle('unaffordable',!atMax&&!affordable);
-    const list=$('#facility-list');list.innerHTML='';FACILITIES.forEach(f=>{const assigned=data.assigned.includes(f.id),el=document.createElement('article');el.className='facility';el.innerHTML=`<span class="facility-icon" style="--facility-color:${f.color}">${f.icon}</span><div><b>${f.name}</b><small>${f.desc}</small></div><button class="${assigned?'assigned':''}">${assigned?'稼働中':'配置'}</button>`;el.querySelector('button').onclick=()=>toggleFacility(f.id);list.appendChild(el)});updateOfflineTime();
+    const rate=baseProductionMultiplier();$('#offline-rate').textContent=`拠点Lv.${data.baseLevel} 生産倍率 ×${rate.toFixed(2)}`;
+    const list=$('#facility-list');list.innerHTML='';FACILITIES.forEach(f=>{const assigned=data.assigned.includes(f.id),el=document.createElement('article'),perMin=f.id==='parts'?1:f.id==='treasure'?1.5:2;el.className='facility';el.innerHTML=`<span class="facility-icon" style="--facility-color:${f.color}">${f.icon}</span><div><b>${f.name}</b><small>毎分 ${f.id==='xp'?'EXP':f.id==='parts'?'素材':'インク'} +${Math.floor(perMin*UAT_REWARD_MULTIPLIER*rate).toLocaleString()}（拠点Lv連動）</small></div><button class="${assigned?'assigned':''}">${assigned?'稼働中':'配置'}</button>`;el.querySelector('button').onclick=()=>toggleFacility(f.id);list.appendChild(el)});updateOfflineTime();
+    bindHoldButtons([$('#upgrade-base')],upgradeBase);
   }
   function slots(){return data.baseLevel>=10?3:data.baseLevel>=5?2:1}
   function toggleFacility(id){const index=data.assigned.indexOf(id);if(index>=0){if(data.assigned.length===1){toast('1つは稼働させておこう');return}data.assigned.splice(index,1)}else{if(data.assigned.length>=slots()){toast(`配置枠は${slots()}つです`);return}data.assigned.push(id)}save();renderBase()}
   function pendingMinutes(){return Math.min(720,Math.max(0,(Date.now()-data.lastClaim)/60000))}
+  function baseProductionMultiplier(){return 1+(Math.max(1,data.baseLevel)-1)*.22}
   function offlineEstimate(mins=pendingMinutes()){
-    const totals={ink:0,parts:0,xp:0};data.assigned.forEach(id=>{if(id==='ink')totals.ink+=Math.floor(mins*2*UAT_REWARD_MULTIPLIER);if(id==='parts')totals.parts+=Math.floor(mins*UAT_REWARD_MULTIPLIER);if(id==='xp')totals.xp+=Math.floor(mins*2*UAT_REWARD_MULTIPLIER);if(id==='treasure'){totals.ink+=Math.floor(mins*1.5*UAT_REWARD_MULTIPLIER);totals.parts+=Math.floor(mins/30*UAT_REWARD_MULTIPLIER)}});return totals;
+    const totals={ink:0,parts:0,xp:0},rate=baseProductionMultiplier();data.assigned.forEach(id=>{if(id==='ink')totals.ink+=Math.floor(mins*2*UAT_REWARD_MULTIPLIER*rate);if(id==='parts')totals.parts+=Math.floor(mins*UAT_REWARD_MULTIPLIER*rate);if(id==='xp')totals.xp+=Math.floor(mins*2*UAT_REWARD_MULTIPLIER*rate);if(id==='treasure'){totals.ink+=Math.floor(mins*1.5*UAT_REWARD_MULTIPLIER*rate);totals.parts+=Math.floor(mins/30*UAT_REWARD_MULTIPLIER*rate)}});return totals;
   }
   function updateOfflineTime(){const mins=Math.floor(pendingMinutes()),hours=String(Math.floor(mins/60)).padStart(2,'0'),minutes=String(mins%60).padStart(2,'0'),t=offlineEstimate(mins);$('#offline-time').textContent=`${hours}:${minutes}`;$('#offline-preview').textContent=`見込み：インク ${t.ink} / 素材 ${t.parts} / EXP ${t.xp}`}
   function claimOffline(){
@@ -429,7 +497,7 @@
   function upgradeBase(){const cost=40+(data.baseLevel-1)*35;if(data.baseLevel>=BASE_MAX){toast('拠点は Lv.20 でMAXです');return}if(data.ink<cost){toast(`インクが${Math.ceil(cost-data.ink)}足りません`);return}data.ink-=cost;data.baseLevel++;save();renderBase();toast(`拠点が Lv.${data.baseLevel} / ${BASE_MAX} になった！`)}
 
   function renderStageSelect(chapterId=selectedChapter){
-    selectedChapter=Math.max(1,Math.min(10,chapterId));const unlocked=Math.min(MAX_STAGE,data.bestStage+1),power=playerPower();$('#stage-unlocked').textContent=unlocked;$('#select-power').textContent=power;
+    selectedChapter=Math.max(1,Math.min(CHAPTERS.length,chapterId));const unlocked=Math.min(MAX_STAGE,data.bestStage+1),power=playerPower();$('#stage-unlocked').textContent=unlocked;$('#select-power').textContent=power;
     const tabs=$('#chapter-tabs');tabs.innerHTML='';CHAPTERS.forEach(ch=>{const b=document.createElement('button');b.textContent=ch.id;b.title=ch.name;b.disabled=ch.start>unlocked;b.className=ch.id===selectedChapter?'active':'';b.onclick=()=>renderStageSelect(ch.id);tabs.appendChild(b)});
     const chapter=CHAPTERS[selectedChapter-1],grid=$('#stage-grid');grid.innerHTML='';
     for(let stage=chapter.start;stage<=chapter.end;stage++){
@@ -439,26 +507,56 @@
   }
 
   function renderWeapons(){
-    unlockEarnedWeapons();const current=equippedWeapon(),owned=WEAPONS.filter(w=>data.weapons[w.id]).length;$('#weapon-count').textContent=`${owned}/${WEAPONS.length}`;$('#equipped-icon').textContent=current.icon;$('#equipped-name').textContent=`${current.name} Lv.${weaponLevel(current)}`;$('#equipped-effect').textContent=`${current.type}・${current.effect}`;
-    const list=$('#weapon-list');list.innerHTML='';WEAPONS.forEach(w=>{const level=data.weapons[w.id]||0,unlocked=level>0,costParts=2+level*3,costInk=30+level*45,max=level>=10,affordable=data.ink>=costInk&&data.parts>=costParts,el=document.createElement('article');el.className=`weapon-item ${unlocked?'':'locked'} ${data.equippedWeapon===w.id?'equipped':''}`;el.innerHTML=`<span class="weapon-icon">${unlocked?w.icon:'?'}</span><div><small>${w.type}${unlocked?`・Lv.${level}`:`・STAGE ${w.unlock}で解放`}</small><b>${unlocked?w.name:'未発見の武器'}</b><p>${unlocked?w.effect:'ボスを倒して入手しよう'}</p></div><div class="weapon-actions">${unlocked?`<button data-equip>${data.equippedWeapon===w.id?'装備中':'装備'}</button><button data-upgrade ${max||!affordable?'disabled':''} class="${!max&&!affordable?'unaffordable':''}">${max?'MAX':`強化<br><small>●${costInk} ✂${costParts}</small>`}</button>`:''}</div>`;
-      el.querySelector('[data-equip]')?.addEventListener('click',()=>{data.equippedWeapon=w.id;save();renderWeapons();toast(`${w.name}を装備した`)});
-      el.querySelector('[data-upgrade]')?.addEventListener('click',()=>upgradeWeapon(w,costInk,costParts));list.appendChild(el)
+    unlockEarnedWeapons();const current=equippedWeapon(),armor=equippedArmor(),accessory=equippedAccessory(),owned=WEAPONS.filter(w=>data.weapons[w.id]).length;$('#weapon-count').textContent=`${owned}/${WEAPONS.length}`;$('#equipped-icon').textContent=current.icon;$('#equipped-name').textContent=`${current.name} Lv.${weaponLevel(current)}`;$('#equipped-effect').textContent=`${current.type}・${current.effect}`;
+    $('#gear-slots').innerHTML=`<span><small>武器</small><b>${current.icon} ${current.name}</b></span><span><small>防具</small><b>${armor.icon} ${armor.name}</b></span><span><small>アクセ</small><b>${accessory.icon} ${accessory.name}</b></span>`;
+    renderGearGroup('weapon-list',WEAPONS,'weapons','equippedWeapon');renderGearGroup('armor-list',ARMORS,'armors','equippedArmor');renderGearGroup('accessory-list',ACCESSORIES,'accessories','equippedAccessory');
+  }
+  function renderGearGroup(containerId,items,store,equipKey){
+    const list=$(`#${containerId}`);list.innerHTML='';items.forEach(item=>{const level=data[store][item.id]||0,unlocked=level>0,costParts=Math.ceil(2+level*2.4),costInk=Math.ceil(28+level*34+Math.pow(level,1.35)*9),affordable=data.ink>=costInk&&data.parts>=costParts,el=document.createElement('article');el.className=`weapon-item ${unlocked?'':'locked'} ${data[equipKey]===item.id?'equipped':''}`;el.innerHTML=`<span class="weapon-icon">${unlocked?item.icon:'?'}</span><div><small>${item.type||item.rarity||'装備'}${unlocked?`・Lv.${level}`:item.unlock?`・STAGE ${item.unlock}で解放`:'・ガチャで入手'}</small><b>${unlocked?item.name:'未発見の装備'}</b><p>${unlocked?item.effect:item.unlock?'ボスを倒して入手':'装備ガチャから入手'}</p></div><div class="weapon-actions">${unlocked?`<button data-equip>${data[equipKey]===item.id?'装備中':'装備'}</button><button data-upgrade ${!affordable?'disabled':''} class="${!affordable?'unaffordable':''}">強化<br><small>●${costInk} ✂${costParts}</small></button>`:''}</div>`;
+      el.querySelector('[data-equip]')?.addEventListener('click',()=>{data[equipKey]=item.id;save();renderWeapons();toast(`${item.name}を装備した`)});
+      const upgrade=el.querySelector('[data-upgrade]');if(upgrade){upgrade.dataset.store=store;upgrade.dataset.item=item.id;bindHoldButtons([upgrade],()=>upgradeGear(store,item,upgrade))}list.appendChild(el)
     });
   }
-  function upgradeWeapon(w,ink,parts){if(data.ink<ink||data.parts<parts){toast(`必要：インク ${ink}・素材 ${parts}`);return}data.ink-=ink;data.parts-=parts;data.weapons[w.id]++;save();renderWeapons();tone(600,.14,'triangle');toast(`${w.name}が Lv.${data.weapons[w.id]} になった！`)}
+  function upgradeGear(store,item,button){const level=data[store][item.id]||0,costParts=Math.ceil(2+level*2.4),costInk=Math.ceil(28+level*34+Math.pow(level,1.35)*9);if(data.ink<costInk||data.parts<costParts)return;data.ink-=costInk;data.parts-=costParts;data[store][item.id]=level+1;save();const nextLevel=level+1,nextParts=Math.ceil(2+nextLevel*2.4),nextInk=Math.ceil(28+nextLevel*34+Math.pow(nextLevel,1.35)*9),affordable=data.ink>=nextInk&&data.parts>=nextParts,copy=button?.closest('.weapon-item')?.children[1];if(copy)copy.querySelector('small').textContent=`${item.type||item.rarity||'装備'}・Lv.${nextLevel}`;if(button){button.innerHTML=`強化<br><small>●${nextInk} ✂${nextParts}</small>`;button.disabled=!affordable;button.classList.toggle('unaffordable',!affordable)}if(data.equippedWeapon===item.id)$('#equipped-name').textContent=`${item.name} Lv.${nextLevel}`;tone(600,.035,'triangle')}
+  function renderGacha(){
+    $('#pity-count').textContent=data.pity||0;$('#gacha-ticket-count').textContent=data.tickets||0;$('#gacha-ink-count').textContent=Math.floor(data.ink);$('#blueprint-count').textContent=data.blueprints||0;
+    $('#gacha-one').disabled=(data.tickets||0)<1&&data.ink<120;$('#gacha-ten').disabled=(data.tickets||0)<10&&data.ink<1080;
+    const history=$('#gacha-history');history.innerHTML=(data.gachaHistory||[]).length?(data.gachaHistory||[]).map(x=>`<article class="gacha-result ${x.rarity.toLowerCase()}"><span>${x.icon}</span><div><small>${x.rarity}・${x.kind}</small><b>${x.name}</b></div><em>${x.new?'NEW':'Lv.UP'}</em></article>`).join(''):'<p class="empty-gacha">まだガチャを回していません</p>';
+  }
+  function pullGacha(count){
+    const ticketCost=count;if((data.tickets||0)>=ticketCost)data.tickets-=ticketCost;else{const cost=count===10?1080:120;if(data.ink<cost)return;data.ink-=cost}
+    const results=[];for(let i=0;i<count;i++)results.push(drawGachaItem());data.gachaHistory=results.slice(-10).reverse();save();renderGacha();tone(results.some(x=>x.rarity==='SSR')?780:520,.18,'triangle');toast(results.some(x=>x.rarity==='SSR')?'SSR装備を獲得！':`${count}個の装備を獲得！`);
+  }
+  function drawGachaItem(){
+    data.pity=(data.pity||0)+1;const roll=Math.random(),rarity=data.pity>=50?'SSR':roll<.05?'SSR':roll<.25?'SR':'R';if(rarity==='SSR')data.pity=0;
+    const armorPool=ARMORS.filter(x=>x.rarity===rarity),accessoryPool=ACCESSORIES.filter(x=>x.rarity===rarity),weaponPool=WEAPONS.filter(x=>(data.weapons[x.id]||x.unlock<=data.bestStage)&&((rarity==='SSR'&&x.attack>=.7)||(rarity==='SR'&&x.attack>=.28&&x.attack<.7)||(rarity==='R'&&x.attack<.28)));
+    const pools=[...armorPool.map(x=>({item:x,store:'armors',kind:'防具'})),...accessoryPool.map(x=>({item:x,store:'accessories',kind:'アクセ'})),...weaponPool.map(x=>({item:x,store:'weapons',kind:'武器'}))],pick=pools[Math.floor(Math.random()*pools.length)]||{item:armorPool[0]||ARMORS[0],store:'armors',kind:'防具'},wasNew=!data[pick.store][pick.item.id];
+    data[pick.store][pick.item.id]=(data[pick.store][pick.item.id]||0)+1;if(!wasNew)data.blueprints=(data.blueprints||0)+(rarity==='SSR'?5:rarity==='SR'?2:1);
+    return {name:pick.item.name,icon:pick.item.icon,rarity,kind:pick.kind,new:wasNew};
+  }
+  function enemyStory(entry){
+    const origins={stickman:'ノートのすみに最初に描かれた、素朴で負けず嫌いなラクガキ。',slime:'消しカスとインクが混ざって生まれた、ぷるぷるの掃除屋。',goblin:'使いかけの文房具を集める、いたずら好きの小鬼。',dragon:'赤ペンの勢いから生まれた、誇り高い空のラクガキ。',ghost:'書き損じを消した跡に残る、少しさびしがりな影。',robot:'定規で引いた線と計算式から組み上がった機械生命。',crab:'ホチキスやクリップを殻にした、机上の働き者。',knight:'定規を盾に、コンパスを槍にして余白を守る騎士。',void:'描かれなかった余白そのもの。新しい線を静かに待っている。'};
+    const stationery=entry.name.includes('ホチキス')?'背中のホチキスで紙を束ね、針の脚でカチカチ歩く。':entry.name.includes('定規')?'体の直線は定規でできており、曲がった線を見ると直したくなる。':entry.name.includes('ふせん')?'付箋の羽を貼ったりはがしたりして飛ぶ。':entry.name.includes('クリップ')?'クリップを曲げた体で、散らかった紙を回収する。':'';
+    return `${origins[entry.type]||'紙とインクのすき間から生まれた、個性豊かなラクガキ。'}${stationery}`;
+  }
+  function openEnemyDetail(entry,record){
+    const unlocked=!!record,type=ENEMY_TYPES[entry.type];$('#enemy-detail-name').textContent=unlocked?entry.name:'？？？？？';$('#enemy-detail-kicker').textContent=unlocked?`CHARACTER FILE・CHAPTER ${entry.chapter}`:'UNKNOWN CHARACTER';$('#enemy-detail-story').textContent=unlocked?enemyStory(entry):`CHAPTER ${entry.chapter}のどこかにいるようだ。出会うと詳しい説明が解放されます。`;
+    $('#enemy-detail-stats').innerHTML=unlocked?`<span><small>戦闘特性</small><b>${type.trait}</b></span><span><small>初出</small><b>STAGE ${(entry.chapter-1)*10+1}〜</b></span><span><small>遭遇</small><b>${record.count}回</b></span><span><small>個体発見率</small><b>${Math.round(record.variants.length/(entry.boss?1:5)*100)}%</b></span>`:'<span><small>発見ヒント</small><b>ステージを進めよう</b></span>';
+    drawEnemyArt($('#enemy-detail-canvas'),{...type,...entry,variant:ENEMY_VARIANTS[0]},!unlocked);openModal('#enemy-detail-modal');
+  }
   function renderEnemyBook(){
     const grid=$('#enemy-collection-grid');grid.innerHTML='';const catalog=enemyCatalog();
     catalog.forEach(entry=>{const record=data.enemyBook[entry.name],unlocked=!!record,type=ENEMY_TYPES[entry.type],el=document.createElement('article');el.className=`enemy-book-item ${unlocked?'':'locked'} ${entry.boss?'boss-entry':''}`;
       const canvas=document.createElement('canvas');canvas.width=180;canvas.height=160;canvas.setAttribute('aria-label',unlocked?entry.name:'未遭遇の敵');
       const copy=document.createElement('div');copy.innerHTML=`<span>${entry.boss?'BOSS':`CH.${entry.chapter}`}</span><b>${unlocked?entry.name:'？？？？？'}</b><small>${unlocked?type.trait:'この敵に出会うと記録されます'}</small>${unlocked?`<em>遭遇 ${record.count}回・個体 ${record.variants.length}/${entry.boss?1:5}</em>`:'<em>未遭遇</em>'}`;
-      el.append(canvas,copy);grid.appendChild(el);drawEnemyArt(canvas,{...type,...entry,variant:ENEMY_VARIANTS[0]},!unlocked)
+      el.append(canvas,copy);el.tabIndex=0;el.setAttribute('role','button');el.onclick=()=>openEnemyDetail(entry,record);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openEnemyDetail(entry,record)}};grid.appendChild(el);drawEnemyArt(canvas,{...type,...entry,variant:ENEMY_VARIANTS[0]},!unlocked)
     });
   }
   function renderCardBook(){const grid=$('#collection-grid');grid.innerHTML='';CARDS.forEach(card=>{const unlocked=data.discovered.includes(card.id),el=document.createElement('article');el.className=`collection-item ${unlocked?'':'locked'}`;el.innerHTML=`<span class="rarity">${unlocked?card.rarity:'？？？'}</span><span class="card-emoji">${unlocked?card.icon:'?'}</span><b>${unlocked?card.name:'未発見'}</b><small>${unlocked?card.desc:'冒険で見つけよう'}</small>`;grid.appendChild(el)})}
   function renderCollection(tab='enemy'){
     const enemyCount=enemyBookCount(),allCount=enemyCatalog().length,cardCount=data.discovered.length,totalPercent=Math.round((enemyCount+cardCount)/(allCount+CARDS.length)*100);
     $('#collection-total').textContent=`${totalPercent}%`;$('#enemy-book-total').textContent=`${enemyCount}/${allCount}`;$('#card-book-total').textContent=`${cardCount}/${CARDS.length}`;
-    const enemyMode=tab==='enemy';$('#enemy-book-tab').classList.toggle('active',enemyMode);$('#card-book-tab').classList.toggle('active',!enemyMode);$('#enemy-collection-grid').classList.toggle('hidden',!enemyMode);$('#collection-grid').classList.toggle('hidden',enemyMode);$('#collection-lead').textContent=enemyMode?'出会った敵の落書き、特性、出現場所を記録。レア個体は5種類あります。':'冒険中に一度でも選んだ強化が記録されます。';
+    const enemyMode=tab==='enemy';$('#enemy-book-tab').classList.toggle('active',enemyMode);$('#card-book-tab').classList.toggle('active',!enemyMode);$('#enemy-collection-grid').classList.toggle('hidden',!enemyMode);$('#collection-grid').classList.toggle('hidden',enemyMode);$('#collection-lead').textContent=enemyMode?'キャラクターをタップすると、由来・性格・戦闘特性・個体発見率を確認できます。':'冒険中に一度でも選んだ強化が記録されます。';
     if(enemyMode)renderEnemyBook();else renderCardBook();
   }
 
@@ -478,14 +576,16 @@
   $('#undo').onclick=()=>{if(draw.history.length<2)return;draw.history.pop();const img=new Image();img.onload=()=>{const ctx=$('#draw-canvas').getContext('2d');ctx.clearRect(0,0,640,420);ctx.drawImage(img,0,0)};img.src=draw.history.at(-1)};
   $('#clear-canvas').onclick=()=>askConfirm('絵を全部消す？','消したあとも「元に戻す」で1つ前の状態へ戻せます。','全部消す',()=>{$('#draw-canvas').getContext('2d').clearRect(0,0,640,420);draw.pushHistory?.()});
   $('#start-run').onclick=()=>beginRun(Math.min(MAX_STAGE,data.bestStage+1));
+  $('#start-endless').onclick=()=>beginRun(Math.max(1,Math.min(MAX_STAGE,data.bestStage||1)),true);
+  $('#auto-mode').onchange=e=>{data.autoMode=e.target.checked;save();toast(data.autoMode?'完全自動モード ON':'完全自動モード OFF')};
   $('#open-stages').onclick=()=>{selectedChapter=chapterFor(data.selectedStage).id;renderStageSelect(selectedChapter);showView('stage-view')};
   $('#start-selected').onclick=()=>beginRun(data.selectedStage);
-  $('#open-base').onclick=()=>{renderBase();showView('base-view')};$('#open-collection').onclick=()=>{renderCollection();showView('collection-view')};$('#open-growth').onclick=()=>{renderGrowth();showView('growth-view')};$('#open-weapons').onclick=()=>{renderWeapons();showView('weapons-view')};
+  $('#open-base').onclick=()=>{renderBase();showView('base-view')};$('#open-collection').onclick=()=>{renderCollection();showView('collection-view')};$('#open-growth').onclick=()=>{renderGrowth();showView('growth-view')};$('#open-weapons').onclick=()=>{renderWeapons();showView('weapons-view')};$('#open-gacha').onclick=()=>{renderGacha();showView('gacha-view')};
   $('#enemy-book-tab').onclick=()=>renderCollection('enemy');$('#card-book-tab').onclick=()=>renderCollection('card');
-  $$('.growth-item button').forEach(button=>button.onclick=()=>upgradeGrowth(button.dataset.growth));
   $('#quit-run').onclick=()=>askConfirm('冒険を中断する？','ここまでに獲得した報酬は残ります。','中断する',()=>{run.active=false;clearTimeout(battleTimer);run=null;showView('home-view')});
-  $('#speed-button').onclick=()=>{if(!run)return;if(data.bestStage<run.stage){toast('2倍速はクリア済みステージで使えます');return}run.speed=run.speed===1?2:1;$('#speed-button').textContent=`×${run.speed}`;toast(run.speed===2?'2倍速':'通常速度')};
-  $('#claim-offline').onclick=claimOffline;$('#upgrade-base').onclick=upgradeBase;
+  $('#speed-button').onclick=()=>{if(!run)return;if(!run.endless&&data.bestStage<run.stage){toast('2倍速はクリア済みステージで使えます');return}run.speed=run.speed===1?2:1;$('#speed-button').textContent=`×${run.speed}`;toast(run.speed===2?'2倍速':'通常速度')};
+  $('#claim-offline').onclick=claimOffline;
+  $('#gacha-one').onclick=()=>pullGacha(1);$('#gacha-ten').onclick=()=>pullGacha(10);$('#close-enemy-detail').onclick=()=>closeModal('#enemy-detail-modal');
   $('#chapter-return').onclick=()=>{closeModal('#chapter-modal');run=null;showView('home-view');renderHeader()};
   $('#open-help').onclick=()=>openTutorial(false);$('#tutorial-skip').onclick=()=>finishTutorial(tutorialFirstRun);$('#tutorial-next').onclick=()=>{if(tutorialIndex<TUTORIAL.length-1){tutorialIndex++;renderTutorial()}else finishTutorial(tutorialFirstRun)};
 
