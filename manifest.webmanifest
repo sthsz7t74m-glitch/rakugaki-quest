@@ -1,0 +1,10 @@
+{
+  "name": "ラクガキクエスト",
+  "short_name": "ラクガキ",
+  "description": "自分で描いた落書きが戦う育成オートバトル",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fffdf5",
+  "theme_color": "#fffdf5",
+  "icons": [{"src":"./public/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
