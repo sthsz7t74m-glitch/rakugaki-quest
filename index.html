@@ -21,9 +21,9 @@
         <div class="resources" aria-label="所持資源">
           <span class="resource"><i class="ink-drop"></i><b id="ink-count">0</b></span>
           <span class="resource parts-resource" title="文房具素材">✂ <b id="parts-count">0</b></span>
-          <span class="resource ticket-resource" title="ガチャ券">券 <b id="ticket-count">0</b></span>
+          <span class="resource ticket-resource" title="ガチャ券" aria-label="ガチャ券の所持数"><i class="ticket-sketch" aria-hidden="true"></i><b id="ticket-count">0</b></span>
           <button id="open-help" class="help-button" aria-label="遊び方を見る">?</button>
-          <span class="version">v0.5.0</span>
+          <span class="version">v0.5.1</span>
         </div>
       </header>
 
@@ -57,10 +57,10 @@
           <label class="switch"><input id="auto-mode" type="checkbox" /><span></span></label>
         </section>
 
-        <button id="start-endless" class="endless-button"><span>∞</span><b>エンドレスノート</b><small>通常敵とどこまでも連戦・最高 <em id="endless-best">0</em>体</small><i>›</i></button>
+        <button id="start-endless" class="endless-button"><span>∞</span><b>エンドレスノート</b><small>1体ごとにインク・EXP獲得／最高 <em id="endless-best">0</em>体</small><i>›</i></button>
 
         <div class="home-grid">
-          <button id="open-base" class="menu-card accent-yellow"><span class="menu-icon">⌂</span><b>拠点</b><small id="base-summary">Lv.1 / MAX 20・放置報酬</small></button>
+          <button id="open-base" class="menu-card menu-card-simple accent-yellow" aria-label="拠点を開く"><span class="menu-icon">⌂</span><b>拠点</b></button>
           <button id="open-collection" class="menu-card accent-blue"><span class="menu-icon">▤</span><b>図鑑</b><small id="card-count-copy">敵 0%・強化 0%</small></button>
           <button id="open-weapons" class="menu-card accent-red wide-card"><span class="menu-icon">⚔</span><b>装備</b><small id="weapon-summary">えんぴつ剣 Lv.1</small></button>
           <button id="open-gacha" class="menu-card accent-purple wide-card"><span class="menu-icon">★</span><b>装備ガチャ</b><small id="gacha-summary">SSR天井まで 50回</small></button>
@@ -105,7 +105,7 @@
           <button id="claim-offline" class="small-button">まとめて受取</button>
         </section>
         <div id="facility-list" class="facility-list"></div>
-        <button id="upgrade-base" class="primary-button upgrade-button"><span>拠点を強化</span><b id="upgrade-cost">インク 40</b></button>
+        <div class="base-upgrade-actions"><button id="upgrade-base" class="primary-button upgrade-button"><span>拠点を強化</span><b id="upgrade-cost">インク 40</b></button><button id="upgrade-base-max" class="max-upgrade-button"><b>MAXまで強化</b><small>所持インクで上げられるだけ</small></button></div>
         <p class="helper-copy">「経験値スケッチ広場」を配置すると、放置中に主人公EXPを獲得。拠点Lv.5で配置枠が2つ、Lv.10で3つに増えます。</p>
       </section>
 
@@ -117,16 +117,31 @@
         <button id="start-selected" class="primary-button"><span id="selected-stage-copy">STAGE 1 から冒険</span><i>→</i></button>
       </section>
 
+      <section id="equipment-view" class="view" aria-labelledby="equipment-title">
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>EQUIPMENT</small><h1 id="equipment-title">装備</h1></div><span>3 SLOT</span></div>
+        <p class="section-lead">種類ごとにページを分けています。現在の効果と、次の強化で増える数値を確認できます。</p>
+        <div class="equipment-hub">
+          <button id="open-weapon-page" class="equipment-hub-card weapon-hub-card"><span id="hub-weapon-icon">✎</span><div><small>WEAPON</small><b>武器</b><p id="hub-weapon-name">えんぴつ剣 Lv.1</p><em id="hub-weapon-effect">攻撃倍率 +10%</em></div><i>›</i></button>
+          <button id="open-armor-page" class="equipment-hub-card armor-hub-card"><span id="hub-armor-icon">▤</span><div><small>ARMOR</small><b>防具</b><p id="hub-armor-name">厚紙ベスト Lv.1</p><em id="hub-armor-effect">最大HP +12%</em></div><i>›</i></button>
+          <button id="open-accessory-page" class="equipment-hub-card accessory-hub-card"><span id="hub-accessory-icon">∪</span><div><small>ACCESSORY</small><b>アクセサリー</b><p id="hub-accessory-name">クリップのお守り Lv.1</p><em id="hub-accessory-effect">攻撃倍率 +6%</em></div><i>›</i></button>
+        </div>
+      </section>
+
       <section id="weapons-view" class="view" aria-labelledby="weapons-title">
-        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>EQUIPMENT</small><h1 id="weapons-title">武器・防具・アクセ</h1></div><span id="weapon-count">1/12</span></div>
-        <section class="equipped-card"><span id="equipped-icon">✎</span><div><small>装備中</small><b id="equipped-name">えんぴつ剣</b><p id="equipped-effect">攻撃力 +10%</p></div></section>
-        <section class="gear-slots" id="gear-slots"></section>
-        <p class="section-lead">すべての装備は上限なし。ボタン長押しで連続強化できます。</p>
-        <h2 class="equipment-group-title">武器</h2>
+        <div class="section-heading"><button class="back-equipment icon-button">←</button><div><small>WEAPON</small><h1 id="weapons-title">武器</h1></div><span id="weapon-count">1/12</span></div>
+        <p class="section-lead">攻撃力を中心に強化。武器ごとの会心・貫通・HP補正も現在値で表示します。</p>
         <div id="weapon-list" class="weapon-list"></div>
-        <h2 class="equipment-group-title">防具</h2>
+      </section>
+
+      <section id="armors-view" class="view" aria-labelledby="armors-title">
+        <div class="section-heading"><button class="back-equipment icon-button">←</button><div><small>ARMOR</small><h1 id="armors-title">防具</h1></div><span id="armor-count">1/6</span></div>
+        <p class="section-lead">最大HPとダメージ軽減を強化。粘り強く戦いたいときの装備です。</p>
         <div id="armor-list" class="weapon-list"></div>
-        <h2 class="equipment-group-title">アクセサリー</h2>
+      </section>
+
+      <section id="accessories-view" class="view" aria-labelledby="accessories-title">
+        <div class="section-heading"><button class="back-equipment icon-button">←</button><div><small>ACCESSORY</small><h1 id="accessories-title">アクセサリー</h1></div><span id="accessory-count">1/6</span></div>
+        <p class="section-lead">攻撃・HP・会心・貫通を補助。武器と防具に足りない能力を補えます。</p>
         <div id="accessory-list" class="weapon-list"></div>
       </section>
 
@@ -136,8 +151,8 @@
           <div class="gacha-star">★</div><h2>文房具ボックス</h2>
           <p>武器・防具・アクセサリーが登場。50回以内にSSR確定。</p>
           <div class="gacha-rates"><span>R 75%</span><span>SR 20%</span><span>SSR 5%</span></div>
-          <div class="gacha-currency">ガチャ券 <b id="gacha-ticket-count">0</b>枚 ／ インク <b id="gacha-ink-count">0</b> ／ 設計図 <b id="blueprint-count">0</b></div>
-          <div class="gacha-actions"><button id="gacha-one"><b>1回</b><small>券1枚 または ●120</small></button><button id="gacha-ten"><b>10連</b><small>券10枚 または ●1,080</small></button></div>
+          <div class="gacha-currency"><span class="gacha-ticket-label"><i class="ticket-sketch ticket-sketch-large" aria-hidden="true"></i><span>ガチャ券</span> <b id="gacha-ticket-count">0</b>枚</span> ／ インク <b id="gacha-ink-count">0</b> ／ 設計図 <b id="blueprint-count">0</b></div>
+          <div class="gacha-actions"><button id="gacha-one"><b>1回</b><small><i class="ticket-sketch ticket-sketch-mini" aria-hidden="true"></i> 1枚 または ●120</small></button><button id="gacha-ten"><b>10連</b><small><i class="ticket-sketch ticket-sketch-mini" aria-hidden="true"></i> 10枚 または ●1,080</small></button></div>
         </section>
         <p class="section-lead">重複装備はレベル+1と設計図へ変換。設計図1枚につき全能力が0.1%伸びます。</p>
         <div id="gacha-history" class="gacha-history"></div>
@@ -161,9 +176,9 @@
           <div><small>冒険開始時の能力</small><b>HP <em id="growth-total-hp">100</em> / 攻撃 <em id="growth-total-attack">13</em></b><p>レベルアップと育成ノートの効果は、毎回の冒険に残ります。</p></div>
         </section>
         <div class="growth-list">
-          <article class="growth-item"><span class="growth-icon red">力</span><div><b>ごんぶと筋力 <i>Lv.<em id="power-level">0</em></i></b><small>冒険開始時の攻撃力 +4・上限なし</small></div><button data-growth="power"><span>強化</span><small id="power-cost"></small></button></article>
-          <article class="growth-item"><span class="growth-icon green">命</span><div><b>破れない紙 <i>Lv.<em id="vitality-level">0</em></i></b><small>冒険開始時の最大HP +24・上限なし</small></div><button data-growth="vitality"><span>強化</span><small id="vitality-cost"></small></button></article>
-          <article class="growth-item"><span class="growth-icon blue">会</span><div><b>定規の集中 <i>Lv.<em id="focus-level">0</em></i></b><small>会心率と会心威力が成長・上限なし</small></div><button data-growth="focus"><span>強化</span><small id="focus-cost"></small></button></article>
+          <article class="growth-item"><span class="growth-icon red">力</span><div><b>ごんぶと筋力 <i>Lv.<em id="power-level">0</em></i></b><small>1Lvごとに基礎攻撃力 +4。現在の合計補正：<strong id="power-effect">+0</strong></small></div><div class="growth-actions"><button data-growth="power"><span>強化</span><small id="power-cost"></small></button><button data-growth-max="power"><span>MAX強化</span><small>所持分まで</small></button></div></article>
+          <article class="growth-item"><span class="growth-icon green">命</span><div><b>破れない紙 <i>Lv.<em id="vitality-level">0</em></i></b><small>1Lvごとに基礎最大HP +24。現在の合計補正：<strong id="vitality-effect">+0</strong></small></div><div class="growth-actions"><button data-growth="vitality"><span>強化</span><small id="vitality-cost"></small></button><button data-growth-max="vitality"><span>MAX強化</span><small>所持分まで</small></button></div></article>
+          <article class="growth-item"><span class="growth-icon blue">会</span><div><b>定規の集中 <i>Lv.<em id="focus-level">0</em></i></b><small>1Lvごとに会心率 +1.2%、会心威力 +2.5%。現在：<strong id="focus-effect">+0% / +0%</strong></small></div><div class="growth-actions"><button data-growth="focus"><span>強化</span><small id="focus-cost"></small></button><button data-growth-max="focus"><span>MAX強化</span><small>所持分まで</small></button></div></article>
         </div>
         <section class="level-bonus-card"><b>長押し強化に対応</b><p>強化ボタンを押し続けると連続でレベルアップします。攻撃・HP・集中に上限はありません。</p></section>
       </section>
@@ -249,6 +264,22 @@
           <button id="confirm-cancel">やめる</button>
           <button id="confirm-ok">OK</button>
         </div>
+      </div>
+    </section>
+
+    <section id="gacha-reveal-modal" class="modal gacha-reveal-modal" aria-hidden="true">
+      <div id="gacha-reveal-stage" class="gacha-reveal-stage" role="dialog" aria-modal="true" aria-labelledby="gacha-reveal-name">
+        <button id="gacha-skip" class="gacha-skip">SKIP ›</button>
+        <div class="gacha-rays" aria-hidden="true"></div>
+        <div class="gacha-ticket-flight" aria-hidden="true"><i class="ticket-sketch ticket-sketch-flight"></i></div>
+        <div class="gacha-box" aria-hidden="true"><span>★</span><i></i></div>
+        <article class="gacha-reveal-card">
+          <small id="gacha-reveal-rarity">R・武器</small>
+          <span id="gacha-reveal-icon">✎</span>
+          <h2 id="gacha-reveal-name">装備を獲得！</h2>
+          <b id="gacha-reveal-new">NEW</b>
+        </article>
+        <p id="gacha-reveal-progress" class="gacha-reveal-progress">券をセット中…</p>
       </div>
     </section>
 
