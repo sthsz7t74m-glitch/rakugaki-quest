@@ -20,24 +20,28 @@
         </button>
         <div class="resources" aria-label="所持資源">
           <span class="resource"><i class="ink-drop"></i><b id="ink-count">0</b></span>
-          <span class="version">v0.1.0</span>
+          <span class="resource parts-resource" title="文房具素材">✂ <b id="parts-count">0</b></span>
+          <button id="open-help" class="help-button" aria-label="遊び方を見る">?</button>
+          <span class="version">v0.2.0</span>
         </div>
       </header>
 
       <section id="home-view" class="view active" aria-labelledby="home-title">
-        <div class="chapter-label"><span>CHAPTER 1</span><b>消えかけたノート</b></div>
+        <div class="chapter-label"><span id="home-chapter-number">CHAPTER 1</span><b id="home-chapter-name">消えかけたノート</b></div>
         <section class="hero-card sketch-card">
           <div class="tape tape-left"></div><div class="tape tape-right"></div>
           <div class="level-badge">LV.<b id="hero-level">1</b></div>
           <canvas id="hero-preview" width="320" height="210" aria-label="描いた主人公のプレビュー"></canvas>
           <p id="hero-name" class="hero-name">ななしのラクガキ</p>
+          <div class="hero-xp"><span id="hero-xp-copy">EXP 0 / 25</span><i><b id="hero-xp-bar"></b></i></div>
           <button id="open-draw" class="pencil-button"><span>✎</span> 主人公を描く</button>
         </section>
 
         <section class="progress-card">
-          <div class="progress-copy"><span>最高到達</span><b>STAGE <em id="best-stage">0</em></b></div>
+          <div class="progress-copy"><span>全30ステージ・最高到達</span><b>STAGE <em id="best-stage">0</em></b></div>
           <div class="notebook-line"><i id="chapter-progress"></i></div>
-          <p>ボスを倒して、世界に色を取り戻そう。</p>
+          <div id="chapter-map" class="chapter-map" aria-label="章の進行状況"></div>
+          <p>10ステージごとのボスを倒して、次のノートを開こう。</p>
         </section>
 
         <button id="start-run" class="primary-button scribble">
@@ -48,13 +52,14 @@
         <div class="home-grid">
           <button id="open-base" class="menu-card accent-yellow"><span class="menu-icon">⌂</span><b>拠点</b><small>施設と永久強化</small></button>
           <button id="open-collection" class="menu-card accent-blue"><span class="menu-icon">▤</span><b>図鑑</b><small id="card-count-copy">強化 0 / 9</small></button>
+          <button id="open-growth" class="menu-card accent-green wide-card"><span class="menu-icon">↗</span><b>主人公の育成</b><small id="growth-summary">攻撃・体力・会心を永久強化</small></button>
         </div>
       </section>
 
       <section id="battle-view" class="view" aria-labelledby="battle-title">
         <div class="battle-topline">
           <button id="quit-run" class="icon-button" aria-label="挑戦を中断する">×</button>
-          <div><small>CHAPTER 1</small><h1 id="battle-title">STAGE <span id="stage-number">1</span></h1></div>
+          <div><small id="battle-chapter">CHAPTER 1</small><h1 id="battle-title">STAGE <span id="stage-number">1</span></h1></div>
           <button id="speed-button" class="speed-button" aria-label="戦闘速度">×1</button>
         </div>
 
@@ -97,13 +102,28 @@
         <p class="section-lead">冒険中に一度でも選んだ強化が記録されます。</p>
         <div id="collection-grid" class="collection-grid"></div>
       </section>
+
+      <section id="growth-view" class="view" aria-labelledby="growth-title">
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>PERMANENT GROWTH</small><h1 id="growth-title">主人公の育成</h1></div><span>Lv.<b id="growth-hero-level">1</b></span></div>
+        <section class="growth-summary-card">
+          <span class="growth-pencil">✎</span>
+          <div><small>冒険開始時の能力</small><b>HP <em id="growth-total-hp">100</em> / 攻撃 <em id="growth-total-attack">13</em></b><p>レベルアップと育成ノートの効果は、毎回の冒険に残ります。</p></div>
+        </section>
+        <div class="growth-list">
+          <article class="growth-item"><span class="growth-icon red">力</span><div><b>ごんぶと筋力 <i>Lv.<em id="power-level">0</em></i></b><small>冒険開始時の攻撃力 +2</small></div><button data-growth="power"><span>強化</span><small id="power-cost"></small></button></article>
+          <article class="growth-item"><span class="growth-icon green">命</span><div><b>破れない紙 <i>Lv.<em id="vitality-level">0</em></i></b><small>冒険開始時の最大HP +12</small></div><button data-growth="vitality"><span>強化</span><small id="vitality-cost"></small></button></article>
+          <article class="growth-item"><span class="growth-icon blue">会</span><div><b>定規の集中 <i>Lv.<em id="focus-level">0</em></i></b><small>会心率 +1.5%</small></div><button data-growth="focus"><span>強化</span><small id="focus-cost"></small></button></article>
+        </div>
+        <section class="level-bonus-card"><b>レベルボーナス</b><p>主人公Lv.が1上がるたびに、最大HP +8・攻撃力 +1。経験値は戦闘やスケッチ広場で獲得できます。</p></section>
+      </section>
     </main>
 
     <section id="draw-modal" class="modal" aria-hidden="true">
       <div class="modal-sheet draw-sheet">
         <div class="sheet-heading"><div><small>MY HERO</small><h2>主人公を描こう</h2></div><button id="close-draw" class="icon-button">×</button></div>
         <input id="name-input" class="name-input" maxlength="12" placeholder="主人公のなまえ" aria-label="主人公の名前" />
-        <div class="canvas-wrap"><canvas id="draw-canvas" width="640" height="420"></canvas><span>ここに描いてね</span></div>
+        <p class="draw-guide">指やマウスで自由に描こう。描いている間は画面が動きません。</p>
+        <div class="canvas-wrap"><canvas id="draw-canvas" width="640" height="420" aria-label="主人公を描くキャンバス"></canvas><span>ここに描いてね</span></div>
         <div class="drawing-tools">
           <div class="colors" role="group" aria-label="ペンの色">
             <button class="color active" data-color="#222222" style="--swatch:#222222" aria-label="黒"></button>
@@ -133,6 +153,29 @@
         <div id="dialog-portrait" class="dialog-portrait">?</div>
         <small id="dialog-speaker">ボス</small><p id="dialog-text"></p>
         <button id="dialog-next" class="primary-button">つぎへ →</button>
+      </div>
+    </section>
+
+    <section id="chapter-modal" class="modal" aria-hidden="true">
+      <div class="modal-sheet chapter-sheet">
+        <span id="chapter-clear-kicker">CHAPTER CLEAR!</span>
+        <div id="chapter-clear-icon" class="chapter-clear-icon">✓</div>
+        <h2 id="chapter-clear-title">次のノートが開いた！</h2>
+        <p id="chapter-clear-copy"></p>
+        <div id="chapter-rewards" class="chapter-rewards"></div>
+        <button id="chapter-return" class="primary-button">拠点へ戻る →</button>
+      </div>
+    </section>
+
+    <section id="tutorial-modal" class="modal tutorial-modal" aria-hidden="true">
+      <div class="modal-sheet tutorial-sheet">
+        <button id="tutorial-skip" class="tutorial-skip">スキップ</button>
+        <div id="tutorial-visual" class="tutorial-visual" aria-hidden="true"></div>
+        <small id="tutorial-kicker">はじめに</small>
+        <h2 id="tutorial-title"></h2>
+        <p id="tutorial-copy"></p>
+        <div id="tutorial-dots" class="tutorial-dots" aria-label="説明の進行状況"></div>
+        <button id="tutorial-next" class="primary-button">つぎへ →</button>
       </div>
     </section>
 

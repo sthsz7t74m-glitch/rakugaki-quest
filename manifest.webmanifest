@@ -1,7 +1,7 @@
 {
   "name": "ラクガキクエスト",
   "short_name": "ラクガキ",
-  "description": "自分で描いた落書きが戦う育成オートバトル",
+  "description": "自分で描いた落書きが全30ステージを戦う育成オートバトル",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#fffdf5",
