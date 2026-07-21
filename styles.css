@@ -130,6 +130,14 @@ button.unaffordable:after{content:"不足";display:block;font-size:7px;color:#9b
 }
 @media (max-width:335px){.app-shell{padding-left:12px;padding-right:12px}.topbar{gap:3px}.resources{gap:3px}.resource{padding:3px 4px}.logo b{font-size:14px}.logo-mark{flex-basis:30px;width:30px;height:30px}}
 
+/* v0.5.2: keep the logo clear of the resource counters on narrow phones */
+.growth-current-effect{display:inline-block;margin-top:2px;color:var(--ink)}
+@media (max-width:390px){
+  .topbar{position:relative;height:88px;display:block}
+  .topbar .logo{position:absolute;left:0;top:9px}
+  .topbar .resources{position:absolute;right:0;bottom:7px;max-width:100%}
+}
+
 .gacha-reveal-modal{align-items:center;padding:16px;background:rgba(27,20,39,.88)}
 .gacha-reveal-stage{position:relative;width:min(100%,430px);height:min(620px,90dvh);overflow:hidden;border:3px solid var(--ink);border-radius:24px;background:linear-gradient(165deg,#fffbe8,#eadcff 66%,#cfe2ff);box-shadow:0 8px 0 rgba(0,0,0,.28);display:grid;place-items:center;text-align:center;isolation:isolate}
 .gacha-skip{position:absolute;z-index:8;right:13px;top:13px;border:1.5px solid var(--ink);border-radius:15px;background:rgba(255,255,255,.88);padding:5px 10px;font-size:8px;letter-spacing:.08em}

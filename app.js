@@ -3,7 +3,7 @@
 
   const SAVE_KEY = 'rakugakiQuestSaveV1';
   const MAX_STAGE = 200;
-  const BASE_MAX = 20;
+  const BASE_MAX = 100;
   const UAT_REWARD_MULTIPLIER = 1000;
 
   const ENEMY_TYPES = {
@@ -119,9 +119,9 @@
   ];
 
   const FACILITIES = [
-    {id:'ink',name:'インク工房',icon:'●',color:'#d9d3cc',desc:'UAT：放置中も毎分インク +2,000'},
-    {id:'parts',name:'文房具工房',icon:'✂',color:'#ffdbaa',desc:'UAT：放置中も毎分強化素材 +1,000'},
-    {id:'xp',name:'経験値スケッチ広場',icon:'☆',color:'#cde1ff',desc:'UAT：配置すると放置中も毎分EXP +2,000'},
+    {id:'ink',name:'インク工房',icon:'●',color:'#d9d3cc',desc:'UAT：放置中も1秒ごとにインクを自動収集'},
+    {id:'parts',name:'文房具工房',icon:'✂',color:'#ffdbaa',desc:'UAT：放置中も1秒ごとに強化素材を自動収集'},
+    {id:'xp',name:'経験値スケッチ広場',icon:'☆',color:'#cde1ff',desc:'UAT：配置すると1秒ごとにEXPを自動収集'},
     {id:'treasure',name:'宝探し机',icon:'?',color:'#d8f3dc',desc:'UAT：インクと素材を1000倍でランダム発見'}
   ];
 
@@ -130,14 +130,14 @@
     {icon:'✎',kicker:'STEP 1',title:'主人公を自由に描く',copy:'形や大きさで性能は変わりません。\n好きな主人公を指やマウスで描いてください。'},
     {icon:'⚔',kicker:'STEP 2',title:'戦闘は自動、準備が勝負',copy:'敵ごとに耐久・攻撃・速度・特性が違います。\n戦力と推奨戦力を見て、武器や永久能力を育てましょう。'},
     {icon:'💡',kicker:'STEP 3',title:'冒険中のひらめき',copy:'戦闘後は3枚から一時強化を1つ選択。\n完全自動モードなら相性のよい報酬を自動で選びます。'},
-    {icon:'⌂',kicker:'STEP 4',title:'放置中も素材を集める',copy:'拠点の施設はゲームを閉じても最大12時間働きます。\n拠点Lv.5と10で、同時に動かせる施設が増えます。'},
-    {icon:'★',kicker:'STEP 5',title:'装備とガチャで強くなる',copy:'武器・防具・アクセサリーはすべて上限なし。\nゲーム内報酬だけで装備ガチャを回せます。'},
+    {icon:'⌂',kicker:'STEP 4',title:'放置中も素材を集める',copy:'拠点の施設はゲームを閉じても最大12時間働きます。\n拠点Lv.5・10・25で、同時に動かせる施設が増えます。'},
+    {icon:'★',kicker:'STEP 5',title:'装備とガチャで強くなる',copy:'武器・防具・アクセサリーはすべて上限なし。\nゲーム内報酬だけでガチャを回せます。'},
     {icon:'🗺️',kicker:'STEP 6',title:'好きなステージへ再挑戦',copy:'クリア済みステージは何度でも遊べます。\nエンドレスノートでは通常敵と永遠に連戦できます。'}
   ];
 
   const defaultSave = () => ({
     ink:0, parts:0, xp:0, heroLevel:1, heroName:'ななしのラクガキ', heroImage:'', bestStage:0,
-    selectedStage:1, baseLevel:1, assigned:['ink'], lastClaim:Date.now(), discovered:[], enemyBook:{}, bossSeen:{},
+    selectedStage:1, baseLevel:1, assigned:['ink'], lastClaim:Date.now(), autoCarry:{ink:0,parts:0,xp:0}, discovered:[], enemyBook:{}, bossSeen:{},
     growth:{power:0,vitality:0,focus:0}, weapons:{pencil:1}, equippedWeapon:'pencil', armors:{paperVest:1}, equippedArmor:'paperVest', accessories:{clipCharm:1}, equippedAccessory:'clipCharm',
     tickets:10, blueprints:0, pity:0, gachaHistory:[], autoMode:false, endlessBest:0, chapterClears:{}, tutorialSeen:false
   });
@@ -168,6 +168,7 @@
       merged.chapterClears = {...(raw.chapterClears||{})};
       merged.bossSeen = typeof raw.bossSeen === 'object' && raw.bossSeen ? raw.bossSeen : {};
       merged.enemyBook = typeof raw.enemyBook === 'object' && raw.enemyBook ? raw.enemyBook : {};
+      merged.autoCarry = {...defaultSave().autoCarry,...(raw.autoCarry||{})};
       merged.assigned = Array.isArray(merged.assigned) && merged.assigned.length ? merged.assigned : ['ink'];
       merged.discovered = Array.isArray(merged.discovered) ? merged.discovered : [];
       merged.selectedStage = Math.max(1,Math.min(MAX_STAGE,Number(merged.selectedStage)||1));
@@ -469,7 +470,7 @@
     closeModal('#dialog-modal');openModal('#chapter-modal');
   }
   function showDialog(lines,done){let index=0;const next=()=>{if(index>=lines.length){closeModal('#dialog-modal');done();return}const [speaker,text]=lines[index++];$('#dialog-speaker').textContent=speaker;$('#dialog-text').textContent=text;$('#dialog-portrait').textContent=speaker===data.heroName?'✎':'!';tone(230+index*30,.04,'triangle')};$('#dialog-next').onclick=next;openModal('#dialog-modal');next()}
-  function levelCheck(){let leveled=false;while(data.xp>=xpNeeded()){data.xp-=xpNeeded();data.heroLevel++;leveled=true}if(leveled)toast(`主人公が Lv.${data.heroLevel} になった！`)}
+  function levelCheck(silent=false){let leveled=false;while(data.xp>=xpNeeded()){data.xp-=xpNeeded();data.heroLevel++;leveled=true}if(leveled&&!silent)toast(`主人公が Lv.${data.heroLevel} になった！`)}
 
   function renderGrowth(){
     const stats=startingStats();$('#growth-hero-level').textContent=data.heroLevel;$('#growth-total-hp').textContent=stats.maxHp;$('#growth-total-attack').textContent=Math.round(stats.attack);
@@ -485,22 +486,21 @@
   function renderBase(){
     $('#base-level').textContent=data.baseLevel;const cost=40+(data.baseLevel-1)*35,atMax=data.baseLevel>=BASE_MAX,affordable=data.ink>=cost;$('#upgrade-cost').textContent=atMax?'MAX 強化済み':`インク ${cost}`;$('#upgrade-base').disabled=atMax||!affordable;$('#upgrade-base-max').disabled=atMax||!affordable;$('#upgrade-base').classList.toggle('unaffordable',!atMax&&!affordable);$('#upgrade-base-max').classList.toggle('unaffordable',!atMax&&!affordable);
     const rate=baseProductionMultiplier();$('#offline-rate').textContent=`拠点Lv.${data.baseLevel} 生産倍率 ×${rate.toFixed(2)}`;
-    const list=$('#facility-list');list.innerHTML='';FACILITIES.forEach(f=>{const assigned=data.assigned.includes(f.id),el=document.createElement('article'),perMin=f.id==='parts'?1:f.id==='treasure'?1.5:2;el.className='facility';el.innerHTML=`<span class="facility-icon" style="--facility-color:${f.color}">${f.icon}</span><div><b>${f.name}</b><small>毎分 ${f.id==='xp'?'EXP':f.id==='parts'?'素材':'インク'} +${Math.floor(perMin*UAT_REWARD_MULTIPLIER*rate).toLocaleString()}（拠点Lv連動）</small></div><button class="${assigned?'assigned':''}">${assigned?'稼働中':'配置'}</button>`;el.querySelector('button').onclick=()=>toggleFacility(f.id);list.appendChild(el)});updateOfflineTime();
+    const list=$('#facility-list');list.innerHTML='';FACILITIES.forEach(f=>{const assigned=data.assigned.includes(f.id),el=document.createElement('article'),perSecond=f.id==='parts'?UAT_REWARD_MULTIPLIER*rate/60:f.id==='treasure'?1.5*UAT_REWARD_MULTIPLIER*rate/60:2*UAT_REWARD_MULTIPLIER*rate/60,treasureParts=UAT_REWARD_MULTIPLIER*rate/1800;el.className='facility';el.innerHTML=`<span class="facility-icon" style="--facility-color:${f.color}">${f.icon}</span><div><b>${f.name}</b><small>毎秒 ${f.id==='xp'?'EXP':f.id==='parts'?'素材':'インク'} +${formatRate(perSecond)}${f.id==='treasure'?` / 素材 +${formatRate(treasureParts)}`:''}（拠点Lv連動）</small></div><button class="${assigned?'assigned':''}">${assigned?'稼働中':'配置'}</button>`;el.querySelector('button').onclick=()=>toggleFacility(f.id);list.appendChild(el)});updateOfflineTime();
     bindHoldButtons([$('#upgrade-base')],()=>upgradeBase(false));
     $('#upgrade-base-max').onclick=()=>upgradeBase(true);
   }
-  function slots(){return data.baseLevel>=10?3:data.baseLevel>=5?2:1}
+  function slots(){return data.baseLevel>=25?4:data.baseLevel>=10?3:data.baseLevel>=5?2:1}
   function toggleFacility(id){const index=data.assigned.indexOf(id);if(index>=0){if(data.assigned.length===1){toast('1つは稼働させておこう');return}data.assigned.splice(index,1)}else{if(data.assigned.length>=slots()){toast(`配置枠は${slots()}つです`);return}data.assigned.push(id)}save();renderBase()}
-  function pendingMinutes(){return Math.min(720,Math.max(0,(Date.now()-data.lastClaim)/60000))}
   function baseProductionMultiplier(){return 1+(Math.max(1,data.baseLevel)-1)*.22}
-  function offlineEstimate(mins=pendingMinutes()){
-    const totals={ink:0,parts:0,xp:0},rate=baseProductionMultiplier();data.assigned.forEach(id=>{if(id==='ink')totals.ink+=Math.floor(mins*2*UAT_REWARD_MULTIPLIER*rate);if(id==='parts')totals.parts+=Math.floor(mins*UAT_REWARD_MULTIPLIER*rate);if(id==='xp')totals.xp+=Math.floor(mins*2*UAT_REWARD_MULTIPLIER*rate);if(id==='treasure'){totals.ink+=Math.floor(mins*1.5*UAT_REWARD_MULTIPLIER*rate);totals.parts+=Math.floor(mins/30*UAT_REWARD_MULTIPLIER*rate)}});return totals;
+  function formatRate(value){return value>=100?Math.floor(value).toLocaleString():value.toFixed(value>=10?1:2).replace(/\.?0+$/,'')}
+  function autoRatesPerSecond(){const totals={ink:0,parts:0,xp:0},rate=baseProductionMultiplier();data.assigned.forEach(id=>{if(id==='ink')totals.ink+=2*UAT_REWARD_MULTIPLIER*rate/60;if(id==='parts')totals.parts+=UAT_REWARD_MULTIPLIER*rate/60;if(id==='xp')totals.xp+=2*UAT_REWARD_MULTIPLIER*rate/60;if(id==='treasure'){totals.ink+=1.5*UAT_REWARD_MULTIPLIER*rate/60;totals.parts+=UAT_REWARD_MULTIPLIER*rate/1800}});return totals}
+  function updateOfflineTime(){const rates=autoRatesPerSecond();$('#offline-time').textContent='毎秒受取';$('#offline-preview').textContent=`毎秒：インク ${formatRate(rates.ink)} / 素材 ${formatRate(rates.parts)} / EXP ${formatRate(rates.xp)}`}
+  function collectAutoRewards(){
+    const now=Date.now(),last=Number(data.lastClaim)||now,rawSeconds=Math.max(0,(now-last)/1000),seconds=Math.min(43200,Math.floor(rawSeconds));if(seconds<1)return;
+    const rates=autoRatesPerSecond(),gains={ink:0,parts:0,xp:0};data.autoCarry=data.autoCarry||{ink:0,parts:0,xp:0};Object.keys(gains).forEach(key=>{const raw=rates[key]*seconds+(Number(data.autoCarry[key])||0);gains[key]=Math.floor(raw);data.autoCarry[key]=raw-gains[key];data[key]+=gains[key]});data.lastClaim=rawSeconds>43200?now:last+seconds*1000;levelCheck(true);save();if($('#base-view').classList.contains('active'))updateOfflineTime();
   }
-  function updateOfflineTime(){const mins=Math.floor(pendingMinutes()),hours=String(Math.floor(mins/60)).padStart(2,'0'),minutes=String(mins%60).padStart(2,'0'),t=offlineEstimate(mins);$('#offline-time').textContent=`${hours}:${minutes}`;$('#offline-preview').textContent=`見込み：インク ${t.ink} / 素材 ${t.parts} / EXP ${t.xp}`}
-  function claimOffline(){
-    const mins=pendingMinutes();if(mins<.2){toast('まだ報酬はたまっていません');return}const t=offlineEstimate(mins);data.ink+=Math.max(t.ink,t.parts+t.xp?0:1);data.parts+=t.parts;data.xp+=t.xp;data.lastClaim=Date.now();levelCheck();save();renderBase();toast(`インク+${t.ink} / 素材+${t.parts} / EXP+${t.xp}`);
-  }
-  function upgradeBase(max=false){let raised=0;do{const cost=40+(data.baseLevel-1)*35;if(data.baseLevel>=BASE_MAX||data.ink<cost)break;data.ink-=cost;data.baseLevel++;raised++}while(max);if(!raised){toast(data.baseLevel>=BASE_MAX?'拠点は Lv.20 でMAXです':'インクが足りません');return}save();renderBase();toast(max?`拠点を${raised}レベルまとめて強化！`:`拠点が Lv.${data.baseLevel} / ${BASE_MAX} になった！`)}
+  function upgradeBase(max=false){let raised=0;do{const cost=40+(data.baseLevel-1)*35;if(data.baseLevel>=BASE_MAX||data.ink<cost)break;data.ink-=cost;data.baseLevel++;raised++}while(max);if(!raised){toast(data.baseLevel>=BASE_MAX?`拠点は Lv.${BASE_MAX} でMAXです`:'インクが足りません');return}save();renderBase();toast(max?`拠点を${raised}レベルまとめて強化！`:`拠点が Lv.${data.baseLevel} / ${BASE_MAX} になった！`)}
 
   function renderStageSelect(chapterId=selectedChapter){
     selectedChapter=Math.max(1,Math.min(CHAPTERS.length,chapterId));const unlocked=Math.min(MAX_STAGE,data.bestStage+1),power=playerPower();$('#stage-unlocked').textContent=unlocked;$('#select-power').textContent=power;
@@ -529,7 +529,7 @@
   function renderGearPage(containerId,items,store,equipKey,countId){unlockEarnedWeapons();$(`#${countId}`).textContent=`${items.filter(item=>data[store][item.id]).length}/${items.length}`;renderGearGroup(containerId,items,store,equipKey)}
   function rerenderGearPage(store){if(store==='weapons')renderWeapons();else if(store==='armors')renderArmors();else renderAccessories()}
   function renderGearGroup(containerId,items,store,equipKey){
-    const list=$(`#${containerId}`);list.innerHTML='';items.forEach(item=>{const level=data[store][item.id]||0,unlocked=level>0,cost=gearCost(level),affordable=data.ink>=cost.ink&&data.parts>=cost.parts,el=document.createElement('article');el.className=`weapon-item ${unlocked?'':'locked'} ${data[equipKey]===item.id?'equipped':''}`;el.innerHTML=`<span class="weapon-icon">${unlocked?item.icon:'?'}</span><div class="gear-copy"><small>${item.type||item.rarity||'装備'}${unlocked?`・Lv.${level}`:item.unlock?`・STAGE ${item.unlock}で解放`:'・ガチャで入手'}</small><b>${unlocked?item.name:'未発見の装備'}</b><p class="gear-description">${unlocked?item.effect:item.unlock?'ボスを倒すと入手できます。':'装備ガチャから入手できます。'}</p>${unlocked?`<p class="gear-current"><strong>現在</strong>${gearEffectText(store,item,level)}</p><p class="gear-next"><strong>次Lv</strong>${gearNextText(store)}</p>`:''}</div><div class="weapon-actions">${unlocked?`<button data-equip>${data[equipKey]===item.id?'装備中':'装備'}</button><button data-upgrade ${!affordable?'disabled':''} class="${!affordable?'unaffordable':''}">強化<small>●${cost.ink} ✂${cost.parts}</small></button><button data-upgrade-max ${!affordable?'disabled':''} class="max-gear-button ${!affordable?'unaffordable':''}">MAX強化<small>所持分まで</small></button>`:''}</div>`;
+    const list=$(`#${containerId}`);list.innerHTML='';items.forEach(item=>{const level=data[store][item.id]||0,unlocked=level>0,cost=gearCost(level),affordable=data.ink>=cost.ink&&data.parts>=cost.parts,el=document.createElement('article');el.className=`weapon-item ${unlocked?'':'locked'} ${data[equipKey]===item.id?'equipped':''}`;el.innerHTML=`<span class="weapon-icon">${unlocked?item.icon:'?'}</span><div class="gear-copy"><small>${item.type||item.rarity||'装備'}${unlocked?`・Lv.${level}`:item.unlock?`・STAGE ${item.unlock}で解放`:'・ガチャで入手'}</small><b>${unlocked?item.name:'未発見の装備'}</b><p class="gear-description">${unlocked?item.effect:item.unlock?'ボスを倒すと入手できます。':'ガチャから入手できます。'}</p>${unlocked?`<p class="gear-current"><strong>現在</strong>${gearEffectText(store,item,level)}</p><p class="gear-next"><strong>次Lv</strong>${gearNextText(store)}</p>`:''}</div><div class="weapon-actions">${unlocked?`<button data-equip>${data[equipKey]===item.id?'装備中':'装備'}</button><button data-upgrade ${!affordable?'disabled':''} class="${!affordable?'unaffordable':''}">強化<small>●${cost.ink} ✂${cost.parts}</small></button><button data-upgrade-max ${!affordable?'disabled':''} class="max-gear-button ${!affordable?'unaffordable':''}">MAX強化<small>所持分まで</small></button>`:''}</div>`;
       el.querySelector('[data-equip]')?.addEventListener('click',()=>{data[equipKey]=item.id;save();rerenderGearPage(store);toast(`${item.name}を装備した`)});
       const upgrade=el.querySelector('[data-upgrade]'),maxUpgrade=el.querySelector('[data-upgrade-max]');if(upgrade){bindHoldButtons([upgrade],()=>upgradeGear(store,item,false,upgrade));maxUpgrade.onclick=()=>upgradeGear(store,item,true)}list.appendChild(el)
     });
@@ -616,7 +616,7 @@
   $('#enemy-book-tab').onclick=()=>renderCollection('enemy');$('#card-book-tab').onclick=()=>renderCollection('card');
   $('#quit-run').onclick=()=>askConfirm('冒険を中断する？','ここまでに獲得した報酬は残ります。','中断する',()=>{run.active=false;clearTimeout(battleTimer);run=null;showView('home-view')});
   $('#speed-button').onclick=()=>{if(!run)return;if(!run.endless&&data.bestStage<run.stage){toast('2倍速はクリア済みステージで使えます');return}run.speed=run.speed===1?2:1;$('#speed-button').textContent=`×${run.speed}`;toast(run.speed===2?'2倍速':'通常速度')};
-  $('#claim-offline').onclick=claimOffline;
+  $('#claim-offline').onclick=()=>toast('報酬は1秒ごとに自動で追加されています');
   $('#gacha-one').onclick=()=>pullGacha(1);$('#gacha-ten').onclick=()=>pullGacha(10);$('#close-enemy-detail').onclick=()=>closeModal('#enemy-detail-modal');
   $('#gacha-skip').onclick=()=>{gachaSkipRequested=true;gachaWaitResolve?.()};$('#gacha-reveal-stage').onclick=e=>{if(e.target.closest('#gacha-skip'))return;gachaSkipRequested=true;gachaWaitResolve?.()};
   $('#chapter-return').onclick=()=>{closeModal('#chapter-modal');run=null;showView('home-view');renderHeader()};
@@ -625,7 +625,9 @@
   document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
   document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
   document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
-  setInterval(()=>{if($('#base-view').classList.contains('active'))updateOfflineTime()},10000);
+  collectAutoRewards();
+  setInterval(collectAutoRewards,1000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)collectAutoRewards()});
   renderSampleHeroes();
   renderHeader();
   if(!data.tutorialSeen)setTimeout(()=>openTutorial(true),300);

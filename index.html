@@ -23,7 +23,7 @@
           <span class="resource parts-resource" title="文房具素材">✂ <b id="parts-count">0</b></span>
           <span class="resource ticket-resource" title="ガチャ券" aria-label="ガチャ券の所持数"><i class="ticket-sketch" aria-hidden="true"></i><b id="ticket-count">0</b></span>
           <button id="open-help" class="help-button" aria-label="遊び方を見る">?</button>
-          <span class="version">v0.5.1</span>
+          <span class="version">v0.5.2</span>
         </div>
       </header>
 
@@ -63,8 +63,8 @@
           <button id="open-base" class="menu-card menu-card-simple accent-yellow" aria-label="拠点を開く"><span class="menu-icon">⌂</span><b>拠点</b></button>
           <button id="open-collection" class="menu-card accent-blue"><span class="menu-icon">▤</span><b>図鑑</b><small id="card-count-copy">敵 0%・強化 0%</small></button>
           <button id="open-weapons" class="menu-card accent-red wide-card"><span class="menu-icon">⚔</span><b>装備</b><small id="weapon-summary">えんぴつ剣 Lv.1</small></button>
-          <button id="open-gacha" class="menu-card accent-purple wide-card"><span class="menu-icon">★</span><b>装備ガチャ</b><small id="gacha-summary">SSR天井まで 50回</small></button>
-          <button id="open-growth" class="menu-card accent-green wide-card"><span class="menu-icon">↗</span><b>主人公の育成</b><small id="growth-summary">攻撃・体力・会心を永久強化</small></button>
+          <button id="open-gacha" class="menu-card accent-purple wide-card"><span class="menu-icon">★</span><b>ガチャ</b><small id="gacha-summary">SSR天井まで 50回</small></button>
+          <button id="open-growth" class="menu-card accent-green wide-card"><span class="menu-icon">↗</span><b>育成</b><small id="growth-summary">攻撃・体力・会心を永久強化</small></button>
         </div>
       </section>
 
@@ -98,15 +98,15 @@
       </section>
 
       <section id="base-view" class="view" aria-labelledby="base-title">
-        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>HOME BASE</small><h1 id="base-title">らくがき拠点</h1></div><span>Lv.<b id="base-level">1</b> / MAX 20</span></div>
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>HOME BASE</small><h1 id="base-title">らくがき拠点</h1></div><span>Lv.<b id="base-level">1</b> / MAX 100</span></div>
         <div class="base-illustration"><span>✐</span><b>机のすみっこ基地</b><small>下の施設を「配置」すると、ゲームを閉じていても自動収集</small></div>
         <section class="offline-card">
-          <div><small>自動収集モード・最大12時間 <strong class="uat-badge">UAT ×1000</strong></small><b id="offline-time">00:00</b><em id="offline-rate">拠点Lv.で生産量アップ</em><em id="offline-preview">受取見込みを計算中</em></div>
-          <button id="claim-offline" class="small-button">まとめて受取</button>
+          <div><small>1秒ごとに自動受取・留守中は最大12時間 <strong class="uat-badge">UAT ×1000</strong></small><b id="offline-time">毎秒受取</b><em id="offline-rate">拠点Lv.で生産量アップ</em><em id="offline-preview">毎秒の報酬を計算中</em></div>
+          <button id="claim-offline" class="small-button" disabled>自動受取中</button>
         </section>
         <div id="facility-list" class="facility-list"></div>
         <div class="base-upgrade-actions"><button id="upgrade-base" class="primary-button upgrade-button"><span>拠点を強化</span><b id="upgrade-cost">インク 40</b></button><button id="upgrade-base-max" class="max-upgrade-button"><b>MAXまで強化</b><small>所持インクで上げられるだけ</small></button></div>
-        <p class="helper-copy">「経験値スケッチ広場」を配置すると、放置中に主人公EXPを獲得。拠点Lv.5で配置枠が2つ、Lv.10で3つに増えます。</p>
+        <p class="helper-copy">「経験値スケッチ広場」を配置すると、放置中に主人公EXPを獲得。拠点Lv.5で配置枠が2つ、Lv.10で3つ、Lv.25で4つに増えます。</p>
       </section>
 
       <section id="stage-view" class="view" aria-labelledby="stage-title">
@@ -146,7 +146,7 @@
       </section>
 
       <section id="gacha-view" class="view" aria-labelledby="gacha-title">
-        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>DOODLE GACHA</small><h1 id="gacha-title">装備ガチャ</h1></div><span>天井 <b id="pity-count">0</b>/50</span></div>
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>DOODLE GACHA</small><h1 id="gacha-title">ガチャ</h1></div><span>天井 <b id="pity-count">0</b>/50</span></div>
         <section class="gacha-machine">
           <div class="gacha-star">★</div><h2>文房具ボックス</h2>
           <p>武器・防具・アクセサリーが登場。50回以内にSSR確定。</p>
@@ -170,15 +170,15 @@
       </section>
 
       <section id="growth-view" class="view" aria-labelledby="growth-title">
-        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>PERMANENT GROWTH</small><h1 id="growth-title">主人公の育成</h1></div><span>Lv.<b id="growth-hero-level">1</b></span></div>
+        <div class="section-heading"><button class="back-home icon-button">←</button><div><small>PERMANENT GROWTH</small><h1 id="growth-title">育成</h1></div><span>Lv.<b id="growth-hero-level">1</b></span></div>
         <section class="growth-summary-card">
           <span class="growth-pencil">✎</span>
           <div><small>冒険開始時の能力</small><b>HP <em id="growth-total-hp">100</em> / 攻撃 <em id="growth-total-attack">13</em></b><p>レベルアップと育成ノートの効果は、毎回の冒険に残ります。</p></div>
         </section>
         <div class="growth-list">
-          <article class="growth-item"><span class="growth-icon red">力</span><div><b>ごんぶと筋力 <i>Lv.<em id="power-level">0</em></i></b><small>1Lvごとに基礎攻撃力 +4。現在の合計補正：<strong id="power-effect">+0</strong></small></div><div class="growth-actions"><button data-growth="power"><span>強化</span><small id="power-cost"></small></button><button data-growth-max="power"><span>MAX強化</span><small>所持分まで</small></button></div></article>
-          <article class="growth-item"><span class="growth-icon green">命</span><div><b>破れない紙 <i>Lv.<em id="vitality-level">0</em></i></b><small>1Lvごとに基礎最大HP +24。現在の合計補正：<strong id="vitality-effect">+0</strong></small></div><div class="growth-actions"><button data-growth="vitality"><span>強化</span><small id="vitality-cost"></small></button><button data-growth-max="vitality"><span>MAX強化</span><small>所持分まで</small></button></div></article>
-          <article class="growth-item"><span class="growth-icon blue">会</span><div><b>定規の集中 <i>Lv.<em id="focus-level">0</em></i></b><small>1Lvごとに会心率 +1.2%、会心威力 +2.5%。現在：<strong id="focus-effect">+0% / +0%</strong></small></div><div class="growth-actions"><button data-growth="focus"><span>強化</span><small id="focus-cost"></small></button><button data-growth-max="focus"><span>MAX強化</span><small>所持分まで</small></button></div></article>
+          <article class="growth-item"><span class="growth-icon red">力</span><div><b>ごんぶと筋力 <i>Lv.<em id="power-level">0</em></i></b><small>1Lvごとに基礎攻撃力 +4。<br><span class="growth-current-effect">現在の合計補正：<strong id="power-effect">+0</strong></span></small></div><div class="growth-actions"><button data-growth="power"><span>強化</span><small id="power-cost"></small></button><button data-growth-max="power"><span>MAX強化</span><small>所持分まで</small></button></div></article>
+          <article class="growth-item"><span class="growth-icon green">命</span><div><b>破れない紙 <i>Lv.<em id="vitality-level">0</em></i></b><small>1Lvごとに基礎最大HP +24。<br><span class="growth-current-effect">現在の合計補正：<strong id="vitality-effect">+0</strong></span></small></div><div class="growth-actions"><button data-growth="vitality"><span>強化</span><small id="vitality-cost"></small></button><button data-growth-max="vitality"><span>MAX強化</span><small>所持分まで</small></button></div></article>
+          <article class="growth-item"><span class="growth-icon blue">会</span><div><b>定規の集中 <i>Lv.<em id="focus-level">0</em></i></b><small>1Lvごとに会心率 +1.2%、会心威力 +2.5%。<br><span class="growth-current-effect">現在の合計補正：<strong id="focus-effect">+0% / +0%</strong></span></small></div><div class="growth-actions"><button data-growth="focus"><span>強化</span><small id="focus-cost"></small></button><button data-growth-max="focus"><span>MAX強化</span><small>所持分まで</small></button></div></article>
         </div>
         <section class="level-bonus-card"><b>長押し強化に対応</b><p>強化ボタンを押し続けると連続でレベルアップします。攻撃・HP・集中に上限はありません。</p></section>
       </section>
